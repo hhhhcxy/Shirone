@@ -33,7 +33,7 @@ test.describe("分类索引页 /categories/", () => {
 		await expect(first).toHaveAttribute("href", "/archive/?category=Examples");
 		// 行内 MetaIcon 徽标（与 SiteStats 同视觉语言）
 		await expect(first.locator(".m3-meta-icon svg")).toHaveCount(1);
-		await expect(page.locator("#category-bar-region")).toBeHidden();
+		await expect(page.locator("#category-bar-region")).toBeVisible();
 		await expect(
 			page.locator('widget-layout[data-id="categories"]'),
 		).toBeHidden();
@@ -97,7 +97,7 @@ test.describe("标签索引页 /tags/", () => {
 			"href",
 			"/archive/?tag=Blogging",
 		);
-		await expect(page.locator("#category-bar-region")).toBeHidden();
+		await expect(page.locator("#category-bar-region")).toBeVisible();
 		await expect(
 			page.locator('widget-layout[data-id="categories"]'),
 		).toBeHidden();

@@ -226,3 +226,5 @@ export const fabConfig: FabConfig = {
 `site.homePage` 默认为 `posts`；设为 `about` 后根路径渲染 `content/spec/about.md`，文章列表位于 `/blog/`（分页 `/blog/2/`），原 `/about/` 和根路径数字分页保留重定向。导航可声明 `url: /blog/` 与 `pageKey: blog`，侧栏 pages 可包含 `blog`。
 
 `site.banner.height.desktop` 和 `.mobile` 接受 CSS 长度表达式；未设置时保留原有响应式高度。示例：`desktop: 40vh`、`mobile: clamp(12rem, 28svh, 18rem)`。
+
+文章内部导航仅在文章列表、归档、分类、标签、系列与详情页显示；个人首页模式下这些页面在顶栏统一归属 `blog`。侧栏分类和标签可通过 `pages: [blog, archive, categories, tags, post, series]` 限制到文章板块。

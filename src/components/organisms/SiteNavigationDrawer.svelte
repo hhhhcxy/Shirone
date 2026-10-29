@@ -6,6 +6,7 @@
  * 链接由 Swup 自动接管，点击后收起抽屉；高亮与当前路由/分类筛选同步。
  */
 import Icon from "@iconify/svelte";
+import { sectionNavigationKey } from "@utils/article-navigation";
 import { resolveNavBarLinks, resolvePageKey } from "@utils/nav-utils";
 import { url } from "@utils/url-utils";
 import { onMount, tick } from "svelte";
@@ -43,7 +44,11 @@ const primaryItems = links.map((link) => {
 });
 
 function syncFromRoute() {
-	const pageKey = resolvePageKey(new URL(window.location.href));
+	const pageKey = sectionNavigationKey(
+		resolvePageKey(new URL(window.location.href)),
+		document.getElementById("swup-container")?.dataset.currentPage,
+		siteConfig.homePage === "about",
+	);
 	activePrimary = "";
 	for (const item of primaryItems) {
 		if (item.pageKey && item.pageKey === pageKey) {

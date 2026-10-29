@@ -1,5 +1,6 @@
 enum I18nKey {
 	home = "home",
+	allPosts = "allPosts",
 	notFound = "notFound",
 	notFoundTitle = "notFoundTitle",
 	notFoundDescription = "notFoundDescription",

@@ -7,6 +7,7 @@
  */
 import IconButton from "@components/atoms/action/IconButton.svelte";
 import Icon from "@iconify/svelte";
+import { sectionNavigationKey } from "@utils/article-navigation";
 import { resolveNavBarLinks, resolvePageKey } from "@utils/nav-utils";
 import { url } from "@utils/url-utils";
 import { siteConfig } from "@/config";
@@ -17,7 +18,7 @@ import Search from "./Search.svelte";
 
 const className = Astro.props.class;
 const links = resolveNavBarLinks(navBarConfig.links);
-const currentPageKey = resolvePageKey(Astro.url);
+const currentPageKey = sectionNavigationKey(resolvePageKey(Astro.url), Astro.props.currentPage, siteConfig.homePage === "about");
 
 function hrefFor(path?: string) {
 	return path ? url(path) : undefined;
@@ -98,9 +99,11 @@ function isActive(link: (typeof links)[number]): boolean {
 
 <script>
 	import { resolvePageKey } from "@utils/nav-utils";
+ import { sectionNavigationKey } from "@utils/article-navigation";
+ import { siteConfig } from "@/config/siteConfig";
 
 	function syncTopAppBarNavigation() {
-		setTopAppBarNavigation(resolvePageKey(new URL(window.location.href)));
+		setTopAppBarNavigation(sectionNavigationKey(resolvePageKey(new URL(window.location.href)), document.getElementById("swup-container")?.dataset.currentPage, siteConfig.homePage === "about"));
 	}
 
 	function setTopAppBarNavigation(pageKey: string) {

@@ -30,6 +30,8 @@ export type BannerThemeSource = {
 export type BannerSourceValue = string[] | BannerThemeSource;
 
 export type BannerConfig = {
+	/** 可选的桌面及移动端 Banner CSS 高度。 */
+	height?: { desktop?: string; mobile?: string };
 	src: {
 		desktop: BannerSourceValue;
 		mobile: BannerSourceValue;
@@ -76,6 +78,8 @@ export type BannerConfig = {
 };
 
 export type SiteConfig = {
+	/** 默认 posts；about 使用个人介绍作为首页，文章列表移到 /blog/。 */
+	homePage?: "posts" | "about";
 	site: string;
 	base?: string;
 	title: string;

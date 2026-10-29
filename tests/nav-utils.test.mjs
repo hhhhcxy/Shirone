@@ -139,3 +139,8 @@ test("pruneUnavailableNavLinks keeps every link when nothing is disabled", () =>
 		["/", "/moments/"],
 	);
 });
+
+test("article index navigation respects pagination and deployment base", () => {
+ for (const p of ["/blog/", "/blog/2/"]) assert.equal(resolvePageKey(new URL("https://example.com/site" + p), "/site/"), "blog");
+ assert.equal(resolvePageKey(new URL("https://example.com/blogger/")), "");
+});

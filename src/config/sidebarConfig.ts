@@ -14,7 +14,7 @@
  *    - enable：是否启用该 widget；
  *    - slot："top"（固定在顶部）| "sticky"（页面滚动时吸顶跟随）；
  *    - column："primary"（主栏，默认）| "secondary"（副栏，仅在 arrangement: "dual" 时生效）；
- *    - pages：仅在指定页面展示（如 ["home", "post"]，省略时默认全页面展示）；
+ *    - pages：仅在指定页面展示（如 ["home", "blog", "post"]，省略时默认全页面展示）；
  *    - collapseAfter：折叠阈值（适用于 categories/tags/series，超出条数显示展开按钮）。
  *
  * 类型定义见 src/types/sidebarConfig.ts。
@@ -37,6 +37,7 @@ export const sidebarConfig: SidebarConfig = withUserConfig("sidebar", {
 			collapseAfter: 5,
 			pages: [
 				"home",
+				"blog",
 				"archive",
 				"friends",
 				"moments",
@@ -59,6 +60,7 @@ export const sidebarConfig: SidebarConfig = withUserConfig("sidebar", {
 			collapseAfter: 5,
 			pages: [
 				"home",
+				"blog",
 				"archive",
 				"friends",
 				"moments",
@@ -81,6 +83,7 @@ export const sidebarConfig: SidebarConfig = withUserConfig("sidebar", {
 			collapseAfter: 6,
 			pages: [
 				"home",
+				"blog",
 				"archive",
 				"friends",
 				"moments",
@@ -101,7 +104,7 @@ export const sidebarConfig: SidebarConfig = withUserConfig("sidebar", {
 			enable: true,
 			slot: "top",
 			column: "secondary",
-			pages: ["home", "archive", "categories", "tags"],
+			pages: ["home", "blog", "archive", "categories", "tags"],
 		},
 		{ type: "calendar", enable: true, slot: "top", column: "secondary" },
 		{

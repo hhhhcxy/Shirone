@@ -252,7 +252,8 @@ const defaultSchemeStyle = createDefaultSchemeStyle();
 </style>
 
 <style is:global define:vars={{
-	'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
+	'banner-height-home': siteConfig.banner.height?.desktop ?? `${BANNER_HEIGHT_HOME}vh`,
+	'banner-mobile-height': siteConfig.banner.height?.mobile,
 	'banner-height': `${BANNER_HEIGHT}vh`,
 	'banner-panel-overlap': `${MAIN_PANEL_OVERLAPS_BANNER_HEIGHT}rem`,
 }}>
@@ -275,15 +276,15 @@ const defaultSchemeStyle = createDefaultSchemeStyle();
 		html[data-wallpaper-mode="banner"] body[data-banner-has-desktop="true"] #top-row { height: calc(var(--banner-stage-height) - 4.5rem); }
 	}
 	@media (max-width: 1023.98px) {
-		:root { --banner-stage-height: max(70vh, 28rem); }
+		:root { --banner-stage-height: var(--banner-mobile-height, max(70vh, 28rem)); }
 		@media (max-width: 479.98px) { :root { --banner-panel-overlap: var(--m3e-space-2); } }
 		@media (min-width: 480px) and (max-width: 767.98px) { :root { --banner-panel-overlap: var(--m3e-space-2); } }
 		html[data-wallpaper-mode="banner"] body[data-current-page="home"][data-banner-has-mobile="true"] #main-layout { top: var(--banner-content-top); }
 		html[data-wallpaper-mode="banner"] body[data-current-page="home"][data-banner-has-mobile="true"] #top-row { height: calc(var(--banner-stage-height) - 4.5rem); }
 		body[data-banner-layout="compact"] #top-row { height: auto; }
 	}
-	@media (min-width: 480px) and (max-width: 767.98px) { :root { --banner-stage-height: max(75vh, 31.25rem); } }
-	@media (min-width: 768px) and (max-width: 1023.98px) { :root { --banner-stage-height: max(70vh, 31.25rem); } }
+	@media (min-width: 480px) and (max-width: 767.98px) { :root { --banner-stage-height: var(--banner-mobile-height, max(75vh, 31.25rem)); } }
+	@media (min-width: 768px) and (max-width: 1023.98px) { :root { --banner-stage-height: var(--banner-mobile-height, max(70vh, 31.25rem)); } }
 </style>
 
 <script>

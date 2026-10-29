@@ -220,3 +220,9 @@ export const fabConfig: FabConfig = {
 任一条件不满足时，音乐功能不得输出 DOM 或样式，不得请求音频/封面等资源，也不得把播放器代码或依赖带入主 bundle。配置消费者应先完成三项校验，再动态加载 `MusicSidebar`；不能用隐藏空卡片代替短路。
 
 `defaultVolume` 与 `defaultMode` 只定义播放器首次初始化的音量和播放模式。播放器挂载后由持久侧栏运行时持有当前曲目、播放位置、音量与模式，Swup 站内导航不应重新读取默认值或重建播放器。
+
+### 首页与 Banner
+
+`site.homePage` 默认为 `posts`；设为 `about` 后根路径渲染 `content/spec/about.md`，文章列表位于 `/blog/`（分页 `/blog/2/`），原 `/about/` 和根路径数字分页保留重定向。导航可声明 `url: /blog/` 与 `pageKey: blog`，侧栏 pages 可包含 `blog`。
+
+`site.banner.height.desktop` 和 `.mobile` 接受 CSS 长度表达式；未设置时保留原有响应式高度。示例：`desktop: 40vh`、`mobile: clamp(12rem, 28svh, 18rem)`。

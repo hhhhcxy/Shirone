@@ -28,6 +28,7 @@ export type SidebarSide = "left" | "right";
  */
 export type SidebarPage =
 	| "notFound" // 404 页面
+	| "blog" // 独立文章列表
 	| "home" // 首页（[...page].astro 及其分页）
 	| "archive" // 归档
 	| "friends" // 友链

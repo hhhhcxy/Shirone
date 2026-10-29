@@ -1,4 +1,7 @@
 ---
+import AboutPage from "@layouts/AboutPage.astro";
+import { siteConfig } from "@/config/siteConfig";
+import { url as siteUrl } from "@utils/url-utils";
 import Pagination from "@components/molecules/Pagination.astro";
 import PostPage from "@components/organisms/PostPage.astro";
 import type { GetStaticPaths } from "astro";
@@ -13,11 +16,14 @@ export const getStaticPaths = (async ({ paginate }) => {
 // https://github.com/withastro/astro/issues/6507#issuecomment-1489916992
 
 const { page } = Astro.props;
+const landing = siteConfig.homePage === "about";
+if (landing && page.currentPage > 1)
+	return Astro.redirect(siteUrl(`/blog/${page.currentPage}/`), 301);
 
 const len = page.data.length;
 ---
 
-<MainGridLayout page="home">
+{landing ? <AboutPage home /> : <MainGridLayout page="home">
     <PostPage page={page}></PostPage>
     <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
-</MainGridLayout>
+</MainGridLayout>}

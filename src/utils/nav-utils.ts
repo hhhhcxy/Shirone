@@ -76,6 +76,7 @@ export function resolvePageKey(
 	}
 
 	if (pathname === "/") return "home";
+	if (/^\/blog(?:\/\d+)?$/.test(pathname)) return "blog";
 	if (url.searchParams.has("category")) return "categories";
 	if (url.searchParams.has("tag")) return "tags";
 	if (pathname === "/archive") return "archive";

@@ -51,7 +51,11 @@ export const siteConfig: SiteConfig = withUserConfig("site", {
 		defaultOpacity: 0.12, // 默认纹理浓度 (0.05 ~ 0.25)
 		allowMotion: true, // 是否允许背景微动效（开启 reduced-motion 时自动静止）
 	},
+	// about 使用个人介绍作为首页，文章列表移到 /blog/。
+	homePage: "posts",
 	banner: {
+		// 可覆盖 desktop / mobile CSS 高度；省略时沿用主题默认值。
+		height: {},
 		// 推荐将图片放入 src/assets，并填写相对 src 的路径，以启用构建期 AVIF/WebP 响应式优化。
 		// 以 "/" 开头的 public 路径与远程 URL 仍可用，但会保留原图、不生成候选。
 		// desktop 用于 >= 1024px；mobile 仅用于 < 1024px 的首页，手机非首页不显示壁纸。

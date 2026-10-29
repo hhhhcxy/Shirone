@@ -148,3 +148,5 @@ test("article index navigation respects pagination and deployment base", () => {
 test("taxonomy landing routes have their own navigation keys",()=>{
  for(const key of ["categories","tags"]) assert.equal(resolvePageKey(new URL("https://example.com/site/"+key+"/"),"/site/"),key);
 });
+
+test("game subroutes keep games navigation identity",()=>{for(const route of ["/games/service/","/games/product/","/games/minecraft/"])assert.equal(resolvePageKey(new URL("https://example.com"+route)),"games")});

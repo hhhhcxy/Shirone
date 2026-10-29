@@ -2,7 +2,7 @@
  * `tsc --isolatedDeclarations` gate.
  *
  * Runs the compiler and fails on any error except the documented exception:
- * the four `TS9013` diagnostics on the `collections` entries in
+ * the five `TS9013` diagnostics on the `collections` entries in
  * `src/content.config.ts`.
  *
  * Why that one cannot be fixed: `defineCollection` is generic, so declaration
@@ -30,7 +30,7 @@ const ALLOWED = [
 		// would wave through every future error here, which is a weaker
 		// guarantee than the comment claims.
 		codes: new Set(["TS9013"]),
-		maxCount: 4,
+		maxCount: 5,
 		reason:
 			"Astro derives entry schemas from this file at build time; see the header comment.",
 	},

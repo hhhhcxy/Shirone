@@ -2,6 +2,12 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const id: Translation = {
+	[Key.gamesOverview]: "Ringkasan",
+	[Key.gamesService]: "Layanan langsung",
+	[Key.gamesProduct]: "Produk",
+	[Key.gamesRecent]: "Terakhir dimainkan",
+	[Key.gamesRecommended]: "Rekomendasi",
+	[Key.gamesUnrated]: "Belum dinilai",
 	[Key.allPosts]: "Semua artikel",
 	[Key.home]: "Beranda",
 	[Key.about]: "Tentang",

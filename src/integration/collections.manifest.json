@@ -1,6 +1,27 @@
 [
-	{ "key": "posts", "pattern": "**/*.{md,mdx}", "schema": "postSchema" },
-	{ "key": "moments", "pattern": "**/*.md", "schema": "momentSchema" },
-	{ "key": "spec", "pattern": "**/*.{md,mdx}", "schema": "specSchema" },
-	{ "key": "series", "pattern": "**/*.md", "schema": "seriesSchema" }
+	{
+		"key": "posts",
+		"pattern": "**/*.{md,mdx}",
+		"schema": "postSchema"
+	},
+	{
+		"key": "moments",
+		"pattern": "**/*.md",
+		"schema": "momentSchema"
+	},
+	{
+		"key": "spec",
+		"pattern": "**/*.{md,mdx}",
+		"schema": "specSchema"
+	},
+	{
+		"key": "series",
+		"pattern": "**/*.md",
+		"schema": "seriesSchema"
+	},
+	{
+		"key": "games",
+		"pattern": "*/index.md",
+		"schema": "gameSchema"
+	}
 ]

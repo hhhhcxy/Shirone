@@ -1,0 +1,47 @@
+---
+import GameGrade from "@components/molecules/GameGrade.astro";
+import TocList from "@components/atoms/blog/TocList.astro";
+import {render} from "astro:content";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import GamesNav from "@components/molecules/GamesNav.astro";
+import LibraryCard from "@components/molecules/LibraryCard.astro";
+import Markdown from "@components/content/Markdown.astro";
+import type {LibraryGame} from "@utils/game-library";
+import {getMarkdownStylesheetAssets} from "@utils/markdown-assets";
+import K from "@i18n/i18nKey";
+import {i18n} from "@i18n/translation";
+import {url} from "@utils/url-utils";
+
+interface Props {game?:LibraryGame;games:LibraryGame[];kind:string}
+const {game,games,kind}=Astro.props;const title=game?.data.title??i18n(kind==="service"?K.gamesService:K.gamesProduct);const rendered=game?await render(game):undefined;const Content=rendered?.Content;const assets=rendered?await getMarkdownStylesheetAssets(rendered.remarkPluginFrontmatter.markdownSyntaxes):[];
+---
+<MainGridLayout title={title} page="games" headings={rendered?.headings}>{assets.map(({pack,css})=>
+<style is:inline slot="head" data-swup-optional={pack} set:html={css}/>)}<div class="p-4">
+<GamesNav/>
+<h1>{title}</h1>{game?<>
+<div class="details">{game.coverUrl&&<img src={game.coverUrl} alt=""/>}<p><GameGrade grade={game.data.grade}/> · {game.data.status} {game.data.hours!==undefined&&<span> · {game.data.hours} {i18n(K.gamesHours)}</span>}</p>
+<p>{game.data.platforms.join(" · ")}</p>
+<p>{game.data.tags.join(" · ")}</p>
+<p>{game.data.summary}</p>{game.data.links.map(link=>
+<a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</div>{rendered&&rendered.headings.length>0&&<TocList headings={rendered.headings}/>}
+{Content&&<Markdown class="mt-6">
+<Content/>
+</Markdown>}<a href={url("/games/"+kind+"/")}>{i18n(kind==="service"?K.gamesService:K.gamesProduct)}</a>
+</>:<>
+<div class="game-filters">
+<label>{i18n(K.gamesSearchPlaceholder)}<input type="search" data-game-search />
+</label>
+<label>{i18n(K.gamesCategoryLabel)}<select data-game-tag>
+<option value="">{i18n(K.tagsViewAll)}</option>{Array.from(new Set(games.flatMap(g=>g.data.tags))).sort().map(tag=>
+<option value={tag}>{tag}</option>)}</select>
+</label>
+</div>
+<div class="list">{games.map(g=>
+<div data-game-entry data-tags={JSON.stringify(g.data.tags)} data-search={[g.data.title,...g.data.tags].join(" ").toLowerCase()}>
+<LibraryCard game={g}/>
+</div>)}</div>
+</>}</div>
+</MainGridLayout>
+<style>h1{font:var(--m3e-type-headline-medium);margin-bottom:var(--m3e-space-4)}.list{display:grid;gap:var(--m3e-space-4)}.details{background:var(--card-bg);padding:var(--m3e-space-4);border-radius:var(--shape-corner-l)}.details img{width:100%;max-height:320px;object-fit:cover;border-radius:var(--shape-corner-m)}.details p,.details a{margin-block:var(--m3e-space-3)}.details a{display:inline-block;margin-right:var(--m3e-space-4);color:var(--primary)}</style>
+<script>import "@utils/game-filter";</script>
+<style>input,select{display:block;width:100%;padding:var(--m3e-space-3);border:1px solid var(--outline);border-radius:var(--shape-corner-m);margin-bottom:var(--m3e-space-4)}[data-game-entry][hidden]{display:none}</style>

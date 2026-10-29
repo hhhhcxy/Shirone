@@ -1,4 +1,10 @@
 enum I18nKey {
+	gamesOverview = "gamesOverview",
+	gamesService = "gamesService",
+	gamesProduct = "gamesProduct",
+	gamesRecent = "gamesRecent",
+	gamesRecommended = "gamesRecommended",
+	gamesUnrated = "gamesUnrated",
 	home = "home",
 	allPosts = "allPosts",
 	notFound = "notFound",

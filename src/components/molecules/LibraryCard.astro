@@ -1,0 +1,20 @@
+---
+import GameGrade from "@components/molecules/GameGrade.astro";
+import type {LibraryGame} from "@utils/game-library";
+import {url} from "@utils/url-utils";
+import K from "@i18n/i18nKey";
+import {i18n} from "@i18n/translation";
+interface Props {game:LibraryGame; small?:boolean; recent?:boolean}
+const {game,small=false,recent=false}=Astro.props;const d=game.data;
+---
+<a class:list={["library-card m3-state-layer",{small}]} href={url("/games/"+game.id+"/")}>
+{game.coverUrl&&<img src={game.coverUrl} alt="" loading="lazy"/>}
+<div class="copy"><h2>{d.title}</h2><GameGrade grade={d.grade}/>
+{d.hours!==undefined&&<span> · {d.hours} {i18n(K.gamesHours)}</span>}
+{recent&&d.lastPlayed&&<p><time datetime={d.lastPlayed.toISOString()}>{d.lastPlayed.toISOString().slice(0,10)}</time></p>}
+{!small&&<><p>{d.status}</p><p class="tags">{d.tags.join(" · ")}</p><p>{d.summary}</p></>}
+</div></a>
+<style>
+.library-card{display:flex;gap:var(--m3e-space-4);padding:var(--m3e-space-4);background:var(--card-bg);color:var(--on-surface);border:1px solid var(--outline-variant);border-radius:var(--shape-corner-l);min-width:0;text-decoration:none;position:relative;font:var(--m3e-type-body-medium)}
+.library-card:focus-visible{outline:3px solid var(--primary);outline-offset:3px}.library-card img{width:clamp(84px,24%,180px);object-fit:cover;align-self:stretch;border-radius:var(--shape-corner-m)}.copy{min-width:0;flex:1}h2{font:var(--m3e-type-title-medium);overflow-wrap:anywhere;margin-bottom:var(--m3e-space-2)}p{margin-top:var(--m3e-space-2);overflow-wrap:anywhere}.tags{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--on-surface-variant)}.small{flex-direction:column;gap:var(--m3e-space-2)}.small img{width:100%;aspect-ratio:16/10}.small h2{font:var(--m3e-type-title-small)}
+</style>

@@ -1,0 +1,24 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import GamesNav from "@components/molecules/GamesNav.astro";
+import LibraryCard from "@components/molecules/LibraryCard.astro";
+import {getGames,recentGames,recommendedGames} from "@utils/game-library";
+import {gamesConfig} from "@/config/gamesConfig";
+import K from "@i18n/i18nKey";
+import {i18n} from "@i18n/translation";
+import {resolveI18nText} from "@utils/i18n-utils";
+const games=await getGames();
+---
+<MainGridLayout title={i18n(K.games)} page="games">
+<div class="p-4">
+<GamesNav/>
+<h1>{i18n(K.games)}</h1>
+<p>{resolveI18nText(gamesConfig.description,K.gamesBanner)}</p>{[[K.gamesRecent,recentGames(games)],[K.gamesRecommended,recommendedGames(games)]].map(([key,items])=>
+<section>
+<h2>{i18n(key as K)}</h2>
+<div class="game-grid">{(items as typeof games).map(game=>
+<LibraryCard game={game} small recent={key===K.gamesRecent}/>)}</div>
+</section>)}</div>
+</MainGridLayout>
+<style>section{margin-top:var(--m3e-space-6)}h1{font:var(--m3e-type-headline-medium)}section>h2{font:var(--m3e-type-title-large);margin-bottom:var(--m3e-space-4)}.game-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--m3e-space-3)}@media(min-width:900px){.game-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
+<script>import "@utils/game-filter";</script>

@@ -112,17 +112,42 @@ export const seriesSchema: z.ZodType = z.object({
  * Helper to create a collection definition with the standard glob loader.
  * Package mode users can import this if they need custom paths.
  */
+export const gameSchema: z.ZodType = z.object({
+	title: z.string(),
+	kind: z.enum(["service", "product"]),
+	grade: z.enum(["S+", "S", "A", "B", "C"]).optional(),
+	status: z.string().default(""),
+	hours: z.number().nonnegative().optional(),
+	lastPlayed: z.coerce.date().optional(),
+	platforms: z.array(z.string()).default([]),
+	tags: z.array(z.string()).default([]),
+	summary: z.string().default(""),
+	cover: z.string().default(""),
+	steamAppId: z.number().int().positive().optional(),
+	links: z
+		.array(
+			z.object({
+				label: z.string(),
+				url: z.url().refine((v) => /^https?:/.test(v)),
+			}),
+		)
+		.default([]),
+	recommendationOrder: z.number().default(0),
+	draft: z.boolean().default(false),
+});
 export function createCollection(
-	key: "posts" | "moments" | "spec" | "series",
+	key: "posts" | "moments" | "spec" | "series" | "games",
 	base: string,
 ): ReturnType<typeof defineCollection> {
 	const loaders = {
+		games: glob({ base: `${base}/games`, pattern: "*/index.md" }),
 		posts: glob({ base: `${base}/posts`, pattern: "**/*.{md,mdx}" }),
 		moments: glob({ base: `${base}/moments`, pattern: "**/*.md" }),
 		spec: glob({ base: `${base}/spec`, pattern: "**/*.{md,mdx}" }),
 		series: glob({ base: `${base}/series`, pattern: "**/*.md" }),
 	};
 	const schemas = {
+		games: gameSchema,
 		posts: postSchema,
 		moments: momentSchema,
 		spec: specSchema,

@@ -6,11 +6,11 @@ import { withUserConfig } from "../utils/config-overlay.ts";
  *
  * 遵循「配置管行为，数据管内容」原则：
  * - enable：页面总开关；false 时导航入口同步隐藏，访问 /games/ 跳转 404；
- * - categories：游戏分类清单（数组顺序即页面顶部 Chips 顺序；
+ * - categories：旧数据页兼容分类清单（新页面按内容 tags 筛选）；旧游戏分类清单（数组顺序即页面顶部 Chips 顺序；
  *   没有任何条目的分类会自动隐藏，因此可放心保留暂时用不到的分类）；
  * - disabledIds：可选被禁用的游戏 ID 列表；
  *
- * 注：游戏的具体清单数据（游戏名、开发商、封面、评分、时长、简评等）请在 `src/data/games.ts` 中维护。
+ * 注：游戏的具体清单数据（游戏名、开发商、封面、评分、时长、简评等）请在 `src/content/games/<slug>/index.md` 中维护。
  */
 export const gamesConfig: GamesConfig = withUserConfig("games", {
 	enable: true,

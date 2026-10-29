@@ -2,6 +2,12 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const th: Translation = {
+	[Key.gamesOverview]: "ภาพรวม",
+	[Key.gamesService]: "บริการต่อเนื่อง",
+	[Key.gamesProduct]: "ผลิตภัณฑ์",
+	[Key.gamesRecent]: "เล่นล่าสุด",
+	[Key.gamesRecommended]: "แนะนำ",
+	[Key.gamesUnrated]: "ยังไม่จัดอันดับ",
 	[Key.allPosts]: "บทความทั้งหมด",
 	[Key.home]: "หน้าแรก",
 	[Key.about]: "เกี่ยวกับ",

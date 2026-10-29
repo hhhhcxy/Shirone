@@ -1,0 +1,13 @@
+---
+import K from "@i18n/i18nKey";
+import {i18n} from "@i18n/translation";
+interface Props {grade?:"S+"|"S"|"A"|"B"|"C"}
+const {grade}=Astro.props;
+---
+<span class="grade" data-grade={grade}>{grade??i18n(K.gamesUnrated)}</span>
+<style>
+.grade{display:inline-block;padding:var(--m3e-space-1) var(--m3e-space-2);border-radius:var(--shape-corner-s);background:var(--surface-container-highest);color:var(--on-surface);font:var(--m3e-type-label-large)}
+.grade[data-grade="S+"],.grade[data-grade="S"]{background:var(--primary-container);color:var(--on-primary-container)}
+.grade[data-grade="A"]{background:var(--tertiary-container);color:var(--on-tertiary-container)}
+.grade[data-grade="B"]{background:var(--secondary-container);color:var(--on-secondary-container)}
+</style>

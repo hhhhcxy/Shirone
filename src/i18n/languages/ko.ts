@@ -2,6 +2,12 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const ko: Translation = {
+	[Key.gamesOverview]: "개요",
+	[Key.gamesService]: "서비스형",
+	[Key.gamesProduct]: "제품형",
+	[Key.gamesRecent]: "최근 플레이",
+	[Key.gamesRecommended]: "추천",
+	[Key.gamesUnrated]: "미평가",
 	[Key.allPosts]: "전체 글",
 	[Key.home]: "홈",
 	[Key.about]: "소개",

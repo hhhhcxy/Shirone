@@ -114,8 +114,35 @@ const momentsCollection = defineCollection({
 	}),
 });
 
+const gamesCollection = defineCollection({
+	loader: glob({ base: "./src/content/games", pattern: "*/index.md" }),
+	schema: z.object({
+		title: z.string(),
+		kind: z.enum(["service", "product"]),
+		grade: z.enum(["S+", "S", "A", "B", "C"]).optional(),
+		status: z.string().default(""),
+		hours: z.number().nonnegative().optional(),
+		lastPlayed: z.coerce.date().optional(),
+		platforms: z.array(z.string()).default([]),
+		tags: z.array(z.string()).default([]),
+		summary: z.string().default(""),
+		cover: z.string().default(""),
+		steamAppId: z.number().int().positive().optional(),
+		links: z
+			.array(
+				z.object({
+					label: z.string(),
+					url: z.url().refine((v) => /^https?:/.test(v)),
+				}),
+			)
+			.default([]),
+		recommendationOrder: z.number().default(0),
+		draft: z.boolean().default(false),
+	}),
+});
 export const collections = {
 	posts: postsCollection,
+	games: gamesCollection,
 	spec: specCollection,
 	series: seriesCollection,
 	moments: momentsCollection,

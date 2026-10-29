@@ -1,0 +1,7 @@
+---
+import GameLibraryPage from "@layouts/GameLibraryPage.astro";
+import {getGames} from "@utils/game-library";
+import {gamesConfig} from "@/config/gamesConfig";
+export async function getStaticPaths(){if(!gamesConfig.enable)return [];const games=await getGames();return [...["service","product"].map(kind=>({params:{slug:kind},props:{games:games.filter(g=>g.data.kind===kind),game:undefined,kind}})),...games.map(game=>({params:{slug:game.id},props:{game,games:[],kind:game.data.kind}}))]}
+---
+<GameLibraryPage {...Astro.props}/>

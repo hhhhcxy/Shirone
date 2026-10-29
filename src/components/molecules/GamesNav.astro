@@ -1,0 +1,5 @@
+---
+import K from "@i18n/i18nKey";import {i18n} from "@i18n/translation";import {url} from "@utils/url-utils";
+---
+<nav aria-label={i18n(K.games)}>{[["",K.gamesOverview],["service/",K.gamesService],["product/",K.gamesProduct]].map(([path,key])=><a href={url("/games/"+path)} aria-current={Astro.url.pathname===url("/games/"+path)?"page":undefined}>{i18n(key as K)}</a>)}</nav>
+<style>nav{display:flex;flex-wrap:wrap;gap:var(--m3e-space-4);margin-bottom:var(--m3e-space-6)}a{padding:var(--m3e-space-3);border-radius:var(--shape-corner-m)}a[aria-current]{background:var(--primary-container);color:var(--on-primary-container)}a:focus-visible{outline:3px solid var(--primary)}</style>

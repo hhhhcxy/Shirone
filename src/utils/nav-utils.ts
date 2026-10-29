@@ -89,7 +89,7 @@ export function resolvePageKey(
 	if (pathname === "/skills") return "skills";
 	if (pathname === "/projects") return "projects";
 	if (pathname === "/devices") return "devices";
-	if (pathname === "/games") return "games";
+	if (pathname === "/games" || pathname.startsWith("/games/")) return "games";
 	if (pathname === "/timeline") return "timeline";
 	if (pathname === "/albums" || pathname.startsWith("/albums/"))
 		return "albums";

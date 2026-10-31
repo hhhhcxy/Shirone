@@ -35,3 +35,20 @@ export function publishedGames<T extends { data: { draft: boolean } }>(
 ): T[] {
 	return games.filter((game) => !game.data.draft);
 }
+
+export function selectGames(
+	games: LibraryGame[],
+	ids: string[] | undefined,
+	automatic: (games: LibraryGame[]) => LibraryGame[],
+): LibraryGame[] {
+	if (ids === undefined) return automatic(games);
+	const seen = new Set<string>();
+	return ids
+		.flatMap((id) => {
+			if (seen.has(id)) return [];
+			seen.add(id);
+			const game = games.find((g) => g.id === id);
+			return game ? [game] : [];
+		})
+		.slice(0, 10);
+}

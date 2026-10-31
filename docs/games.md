@@ -11,3 +11,9 @@ slug 使用小写英文、数字和连字符，不得使用 service 或 product�
 frontmatter 后的 Markdown 正文是长评测，可写标题和相对图片，也可留空。当前不提供评级历史、版本或多维评分。示例游戏均标为示例，替换时请改成自己的记录。
 
 config/games.yaml 的 enable 控制整个板块，description 是概览页简述。旧 data/games.ts 和配置 items 不再作为页面内容来源，请迁移为以上目录格式。
+
+## 手动概览与标签
+
+在 games 配置中设置 recentIds 和 recommendationIds 为游戏 slug 数组，数组顺序为手动顺序；省略则使用自动选择，空数组表示不展示。榜单仅展示 S+、S，按 frontmatter 评级分组，不设置第二份评级。无效引用和重复 slug 不显示，草稿不入选。小卡片只展示封面与名称。
+
+侧栏添加 type: gameTags、pages: [games]、enable: true、slot: sticky 即可显示独立游戏标签；桌面在侧栏，手机随侧栏放到正文之后。标签使用 gameTag 查询参数，不进入文章分类与标签。游戏详情采用阅读卡片与紧凑资料头，Markdown 为评测主体。

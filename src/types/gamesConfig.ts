@@ -62,6 +62,9 @@ export interface GameItem {
 
 /** 游戏页全局配置（行为层） */
 export interface GamesConfig extends PageMeta {
+	/** Omitted = automatic; empty array = intentionally empty. Array order is editorial order. */
+	recentIds?: string[];
+	recommendationIds?: string[];
 	/** 页面总开关；关闭后隐藏导航入口并将 /games/ 重定向到 404。 */
 	enable: boolean;
 	/** 游戏分类列表（决定 Chips 渲染顺序）。 */

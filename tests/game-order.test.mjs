@@ -57,3 +57,19 @@ test("drafts never enter any list and an empty library is valid", () => {
 	assert.deepEqual(publishedGames([]), []);
 	assert.equal(publishedGames([{ data: { draft: false } }]).length, 1);
 });
+
+import { selectGames } from "../src/utils/game-order.ts";
+test("manual picks preserve order, deduplicate and allow intentional empty", () => {
+	const list = [game("a", "S"), game("b", "S+")];
+	assert.deepEqual(
+		selectGames(list, ["b", "a", "b", "missing"], recommendedGames).map(
+			(g) => g.id,
+		),
+		["b", "a"],
+	);
+	assert.deepEqual(selectGames(list, [], recommendedGames), []);
+	assert.deepEqual(
+		selectGames(list, undefined, recommendedGames).map((g) => g.id),
+		["b", "a"],
+	);
+});

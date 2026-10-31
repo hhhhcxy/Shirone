@@ -1,0 +1,16 @@
+---
+import type {LibraryGame} from "@utils/game-library";
+import {url} from "@utils/url-utils";
+interface Props {game:LibraryGame}
+const {game}=Astro.props;
+---
+<a class="game-tile" href={url('/games/'+game.id+'/')}>
+{game.coverUrl?<img src={game.coverUrl} alt="" loading="lazy" width="160" height="100"/>:<span class="tile-fallback" aria-hidden="true">{game.data.title.slice(0,1)}</span>}
+<span>{game.data.title}</span></a>
+<style>
+.game-tile{display:flex;flex-direction:column;gap:var(--m3e-space-2);width:100%;min-width:0;text-decoration:none;color:var(--on-surface);font:var(--m3e-type-label-large)}
+.game-tile img,.tile-fallback{width:100%;aspect-ratio:8/5;object-fit:cover;border-radius:var(--shape-corner-m);background:var(--surface-container-high)}
+.tile-fallback{display:grid;place-items:center;font:var(--m3e-type-headline-medium)}
+.game-tile>span:last-child{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.game-tile:focus-visible{outline:3px solid var(--primary);outline-offset:4px;border-radius:var(--shape-corner-s)}
+</style>

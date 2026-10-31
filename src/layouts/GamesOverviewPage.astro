@@ -1,24 +1,25 @@
 ---
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import GamesNav from "@components/molecules/GamesNav.astro";
-import LibraryCard from "@components/molecules/LibraryCard.astro";
+import GameTile from "@components/molecules/GameTile.astro";
+import GameGrade from "@components/molecules/GameGrade.astro";
 import {getGames,recentGames,recommendedGames} from "@utils/game-library";
+import {selectGames} from "@utils/game-order";
 import {gamesConfig} from "@/config/gamesConfig";
-import K from "@i18n/i18nKey";
-import {i18n} from "@i18n/translation";
+import K from "@i18n/i18nKey";import {i18n} from "@i18n/translation";
 import {resolveI18nText} from "@utils/i18n-utils";
 const games=await getGames();
+const recent=selectGames(games,gamesConfig.recentIds,recentGames);
+const recommended=selectGames(games,gamesConfig.recommendationIds,recommendedGames);
 ---
 <MainGridLayout title={i18n(K.games)} page="games">
-<div class="p-4">
 <GamesNav/>
-<h1>{i18n(K.games)}</h1>
-<p>{resolveI18nText(gamesConfig.description,K.gamesBanner)}</p>{[[K.gamesRecent,recentGames(games)],[K.gamesRecommended,recommendedGames(games)]].map(([key,items])=>
-<section>
-<h2>{i18n(key as K)}</h2>
-<div class="game-grid">{(items as typeof games).map(game=>
-<LibraryCard game={game} small recent={key===K.gamesRecent}/>)}</div>
-</section>)}</div>
-</MainGridLayout>
-<style>section{margin-top:var(--m3e-space-6)}h1{font:var(--m3e-type-headline-medium)}section>h2{font:var(--m3e-type-title-large);margin-bottom:var(--m3e-space-4)}.game-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--m3e-space-3)}@media(min-width:900px){.game-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
-<script>import "@utils/game-filter";</script>
+<div class="overview"><h1>{i18n(K.games)}</h1><p>{resolveI18nText(gamesConfig.description,K.gamesBanner)}</p>
+<section><h2>{i18n(K.gamesRecent)}</h2><div class="tiles">{recent.map(game=><GameTile game={game}/>)}</div></section>
+<section><h2>{i18n(K.gamesRecommended)}</h2>{(["S+","S"] as const).map(grade=>{const entries=recommended.filter(g=>g.data.grade===grade);return entries.length>0&&<div class="tier"><h3><GameGrade grade={grade}/></h3><div class="tiles">{entries.map(game=><GameTile game={game}/>)}</div></div>})}</section>
+</div></MainGridLayout>
+<style>
+.overview{padding:var(--m3e-space-4)}h1{font:var(--m3e-type-headline-medium)}h2{font:var(--m3e-type-title-large);margin-bottom:var(--m3e-space-4)}section{margin-top:var(--m3e-space-6)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:var(--m3e-space-4);align-items:start}.tiles>a{max-width:160px}.tier{display:grid;grid-template-columns:3rem minmax(0,1fr);gap:var(--m3e-space-4);padding-block:var(--m3e-space-4);border-top:1px solid var(--outline-variant)}
+@media(max-width:480px){.tier{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--m3e-space-3)}}
+</style>

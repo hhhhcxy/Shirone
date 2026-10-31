@@ -146,7 +146,12 @@ export interface MusicWidget {
 	pages?: SidebarPage[];
 }
 
+export interface GameTagsWidget extends Omit<TagsWidget, "type"> {
+	type: "gameTags";
+}
+
 export type SidebarWidget =
+	| GameTagsWidget
 	| ProfileWidget
 	| CategoriesWidget
 	| TagsWidget

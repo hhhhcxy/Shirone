@@ -27,6 +27,8 @@ import type {
 	SidebarPage,
 	SidebarWidget,
 } from "@/types/sidebarConfig";
+
+import {gamesConfig} from "@/config/gamesConfig";
 import Profile from "./Profile.astro";
 
 interface Props {
@@ -66,9 +68,11 @@ const MusicSidebar =
 		? (await import("virtual:shirone-music-sidebar")).default
 		: null;
 
+const GameTags = gamesConfig.enable && sidebarConfig.components.some(w=>w.type === "gameTags" && w.enable) ? (await import("@components/organisms/GameTags.astro")).default : null;
 // widget 类型 → 组件（键必须覆盖 SidebarWidget 的全部 type）
 const componentMap = {
-	profile: Profile,
+	gameTags: GameTags,
+ profile: Profile,
 	categories: Categories,
 	tags: Tags,
 	series: Series,
@@ -87,6 +91,7 @@ const widgets = sidebarConfig.enable
 	? sidebarConfig.components.filter(
 			(widget) =>
 				widget.enable &&
+ (widget.type !== "gameTags" || gamesConfig.enable) &&
 				(widget.column ?? "primary") === column &&
 				(widget.type !== "music" || MusicSidebar !== null),
 		)

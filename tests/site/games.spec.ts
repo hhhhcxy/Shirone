@@ -22,35 +22,24 @@ test.describe("游戏内容库", () => {
 			});
 			await card.click();
 			await expect(page).toHaveURL(/games\/minecraft\//);
-			await expect(page.locator("#swup-container h1")).toContainText("Minecraft");
+			await expect(page.locator("#swup-container h1")).toContainText(
+				"Minecraft",
+			);
 			await expect(page.locator(".markdown-content")).toHaveText("");
 		});
-	test("排序、导航和搜索", async ({ page }) => {
+	test("compact tiers and tag filtering", async ({ page }) => {
 		await page.goto("/games/");
-		const sections = page
-			.locator("section")
-			.filter({ has: page.locator(".game-grid") });
-		await expect(
-			sections.nth(0).locator(".library-card").first(),
-		).toHaveAttribute("href", /nte/);
-		await expect(
-			sections.nth(1).locator(".library-card").first(),
-		).toHaveAttribute("href", /minecraft/);
-		await page.locator('nav a[href="/games/service/"]').last().click();
-		await expect(page.locator("#swup-container")).toHaveAttribute(
-			"data-current-page",
-			"games",
-		);
-		await page.locator("[data-game-search]").fill("no-result");
-		await expect(page.locator("[data-game-entry]:visible")).toHaveCount(0);
-		await page.locator("[data-game-search]").fill("异环");
+		await expect(page.locator(".tier")).toHaveCount(2);
+		await expect(page.locator(".game-tile")).toHaveCount(4);
+		await expect(page.locator(".game-tile .grade")).toHaveCount(0);
+		await page.goto("/games/product/?gameTag=" + encodeURIComponent("沙盒"));
 		await expect(page.locator("[data-game-entry]:visible")).toHaveCount(1);
-		await page.goto("/blog/");
-		await page.goto("/games/product/");
-		await expect(page.locator("#swup-container")).toHaveAttribute(
-			"data-current-page",
-			"games",
-		);
+		await expect(
+			page.locator("#swup-container input[type=search]"),
+		).toHaveCount(0);
+		await page.goto("/games/product/?gameTag=missing");
+		await expect(page.locator("[data-game-entry]:visible")).toHaveCount(0);
+		await expect(page.locator("[data-game-empty]")).toBeVisible();
 	});
 	for (const theme of ["light", "dark"])
 		test("无障碍 " + theme, async ({ page }) => {

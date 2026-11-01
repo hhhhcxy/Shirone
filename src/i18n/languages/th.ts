@@ -2,6 +2,8 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const th: Translation = {
+	[Key.gamesNoReview]: "ยังไม่มีบทวิจารณ์",
+	[Key.gamesReviewSource]: "บทวิจารณ์ต้นฉบับบน Steam",
 	[Key.gamesAll]: "ทั้งหมด",
 	[Key.gamesOverview]: "ภาพรวม",
 	[Key.gamesService]: "บริการต่อเนื่อง",

@@ -2,6 +2,8 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const tr: Translation = {
+	[Key.gamesNoReview]: "Henüz inceleme yok",
+	[Key.gamesReviewSource]: "Steam incelemesinin aslı",
 	[Key.gamesAll]: "Tümü",
 	[Key.gamesOverview]: "Genel bakış",
 	[Key.gamesService]: "Canlı hizmet",

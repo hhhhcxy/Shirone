@@ -1,4 +1,8 @@
-import { publishedGames, validateGameSlug } from "./game-order";
+import {
+	publishedGames,
+	validateGameSlug,
+	compareGameReviews,
+} from "./game-order";
 import path from "node:path";
 import { getCollection, type CollectionEntry } from "astro:content";
 import { resolveAsset } from "@utils/asset-utils";
@@ -15,7 +19,7 @@ export async function getGames(): Promise<LibraryGame[]> {
 					!gamesConfig.disabledIds?.includes(e.id) &&
 					!gamesConfig.disabledKeys?.includes(e.id),
 			)
-			.sort((a, b) => a.id.localeCompare(b.id, "en"))
+			.sort(compareGameReviews)
 			.map(async (e) => ({
 				...e,
 				coverUrl: await resolveAsset(

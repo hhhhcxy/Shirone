@@ -119,6 +119,11 @@ export const gameSchema: z.ZodType = z.object({
 	status: z.string().default(""),
 	hours: z.number().nonnegative().optional(),
 	lastPlayed: z.coerce.date().optional(),
+	reviewUpdated: z.coerce.date().optional(),
+	steamReviewUrl: z
+		.url()
+		.regex(/^https:\/\/steamcommunity\.com\//)
+		.optional(),
 	platforms: z.array(z.string()).default([]),
 	tags: z.array(z.string()).default([]),
 	summary: z.string().default(""),

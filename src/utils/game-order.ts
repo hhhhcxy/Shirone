@@ -52,3 +52,18 @@ export function selectGames(
 		})
 		.slice(0, 10);
 }
+
+/** Review activity, independent from playtime and filesystem timestamps. */
+type ReviewGame = Pick<LibraryGame, "id" | "body" | "data">;
+export function compareGameReviews(a: ReviewGame, b: ReviewGame): number {
+	const group = (g: ReviewGame): number =>
+		!g.body?.trim() ? 2 : g.data.reviewUpdated ? 0 : 1;
+	return (
+		group(a) - group(b) ||
+		(group(a) === 0
+			? b.data.reviewUpdated!.getTime() - a.data.reviewUpdated!.getTime()
+			: 0) ||
+		a.data.title.localeCompare(b.data.title, "zh-CN") ||
+		a.id.localeCompare(b.id, "en")
+	);
+}

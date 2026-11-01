@@ -2,6 +2,8 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const ko: Translation = {
+	[Key.gamesNoReview]: "아직 리뷰가 없습니다",
+	[Key.gamesReviewSource]: "Steam 원본 리뷰",
 	[Key.gamesAll]: "전체",
 	[Key.gamesOverview]: "개요",
 	[Key.gamesService]: "서비스형",

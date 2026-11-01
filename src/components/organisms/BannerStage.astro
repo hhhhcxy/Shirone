@@ -21,7 +21,7 @@ const initialSupportingText =
 	normalizedDescription !== normalizedTitle ? normalizedDescription : "";
 const initialDate = date.trim();
 const initialCopyMode =
-	page === "home" ? "home" : page && normalizedTitle ? "context" : "none";
+	page === "games" ? "none" : page === "home" ? "home" : page && normalizedTitle ? "context" : "none";
 const initialLabel =
 	initialCopyMode === "context"
 		? normalizedTitle

@@ -2,6 +2,8 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const zh_TW: Translation = {
+	[Key.gamesNoReview]: "暫無評測",
+	[Key.gamesReviewSource]: "Steam 評測原文",
 	[Key.gamesAll]: "全部",
 	[Key.gamesOverview]: "概覽",
 	[Key.gamesService]: "服務型",

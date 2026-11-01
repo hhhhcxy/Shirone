@@ -2,6 +2,8 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const vi: Translation = {
+	[Key.gamesNoReview]: "Chưa có đánh giá",
+	[Key.gamesReviewSource]: "Đánh giá gốc trên Steam",
 	[Key.gamesAll]: "Tất cả",
 	[Key.gamesOverview]: "Tổng quan",
 	[Key.gamesService]: "Dịch vụ",

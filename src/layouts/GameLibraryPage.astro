@@ -30,7 +30,8 @@ const assets=rendered?await getMarkdownStylesheetAssets(rendered.remarkPluginFro
 <div class="game-links">{game.data.links.map(link=><a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</div></div></div>
 </header>
 {rendered&&rendered.headings.length>0&&<details class="review-toc"><summary>{i18n(K.tableOfContents)}</summary><TocList headings={rendered.headings}/></details>}
-{Content&&<Markdown class="mb-6"><Content/></Markdown>}
+{game.body?.trim() && Content ? <Markdown class="mb-6"><Content/></Markdown> : <p class="mb-6" data-game-no-review>{i18n(K.gamesNoReview)}</p>}
+{game.data.steamReviewUrl&&<p class="mb-6"><a href={game.data.steamReviewUrl} target="_blank" rel="noopener noreferrer">{i18n(K.gamesReviewSource)}</a></p>}
 <footer><a href={url('/games/'+kind+'/')}>{i18n(kind==="service"?K.gamesService:K.gamesProduct)}</a></footer>
 </article></Card>:<div class="p-4"><h1>{title}</h1><div class="list" data-game-kind={kind}>{games.map(g=><div data-game-entry data-tags={JSON.stringify(g.data.tags)}><LibraryCard game={g}/></div>)}</div><p data-game-empty hidden>{i18n(K.gamesNoResults)}</p></div>}
 </MainGridLayout>

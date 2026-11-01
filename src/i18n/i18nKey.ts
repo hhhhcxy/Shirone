@@ -1,4 +1,6 @@
 enum I18nKey {
+	gamesNoReview = "gamesNoReview",
+	gamesReviewSource = "gamesReviewSource",
 	gamesAll = "gamesAll",
 	gamesOverview = "gamesOverview",
 	gamesService = "gamesService",

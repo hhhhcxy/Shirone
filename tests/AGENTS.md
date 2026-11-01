@@ -6,3 +6,5 @@
 - Features involving persistent shell elements must cover both direct page load and Swup navigation. Assert the route contract after `content:replace` rather than assuming the shell was rerendered.
 - Keep visual snapshots local and intentional. They are ignored by Git; do not update them to absorb unrelated viewport, font, page-height, or cache drift. Use DOM geometry/state assertions when a screenshot is unavailable or the difference is not attributable to the change.
 - Select the narrowest relevant fragment, then add `tests/site/a11y.spec.ts` for page/component changes. Use `tests/site/albums.spec.ts`, `icons.spec.ts`, or `motion.spec.ts` when those contracts are touched.
+
+Targeted validation: scan only affected routes in a11y.spec.ts (use --grep); do not run all site fragments for a local change. Keep full suites for shared/global changes. Reuse successful checks until relevant code changes.

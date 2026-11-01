@@ -11,26 +11,23 @@ function syncGameTags(): void {
 		"[data-game-tag-link]",
 	)) {
 		const target = new URL(link.href);
-		if (current || link.dataset.defaultKind)
-			target.pathname = target.pathname.replace(
-				/\/games\/(service|product)\//,
-				"/games/" + (current ?? link.dataset.defaultKind) + "/",
-			);
+		target.pathname = target.pathname.replace(
+			/\/games\/(all|service|product)\//,
+			"/games/" + (current ?? "all") + "/",
+		);
 		link.href = target.href;
-		const serviceCount = Number(link.dataset.serviceCount ?? 0),
-			productCount = Number(link.dataset.productCount ?? 0);
-		const count =
-			current === "service"
-				? serviceCount
-				: current === "product"
-					? productCount
-					: serviceCount + productCount;
-		link.hidden = !!link.dataset.gameTagLink && count === 0;
-		const badge = link.querySelector("span");
-		if (badge) badge.textContent = String(count);
 		if (tag === (link.dataset.gameTagLink ?? ""))
 			link.setAttribute("aria-current", "true");
 		else link.removeAttribute("aria-current");
+	}
+	for (const link of document.querySelectorAll<HTMLAnchorElement>(
+		"[data-games-nav] a",
+	)) {
+		const target = new URL(link.href);
+		if (tag && /\/games\/(all|service|product)\/$/.test(target.pathname))
+			target.searchParams.set("gameTag", tag);
+		else target.searchParams.delete("gameTag");
+		link.href = target.href;
 	}
 }
 syncGameTags();

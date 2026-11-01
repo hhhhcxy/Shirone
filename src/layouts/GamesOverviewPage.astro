@@ -1,4 +1,5 @@
 ---
+import Card from "@components/atoms/display/Card.svelte";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import GamesNav from "@components/molecules/GamesNav.astro";
 import GameTile from "@components/molecules/GameTile.astro";
@@ -14,12 +15,12 @@ const recommended=selectGames(games,gamesConfig.recommendationIds,recommendedGam
 ---
 <MainGridLayout title={i18n(K.games)} page="games">
 <GamesNav/>
-<div class="overview"><h1>{i18n(K.games)}</h1><p>{resolveI18nText(gamesConfig.description,K.gamesBanner)}</p>
-<section><h2>{i18n(K.gamesRecent)}</h2><div class="tiles">{recent.map(game=><GameTile game={game}/>)}</div></section>
-<section><h2>{i18n(K.gamesRecommended)}</h2>{(["S+","S"] as const).map(grade=>{const entries=recommended.filter(g=>g.data.grade===grade);return entries.length>0&&<div class="tier"><h3><GameGrade grade={grade}/></h3><div class="tiles">{entries.map(game=><GameTile game={game}/>)}</div></div>})}</section>
+<div class="overview"><Card color="var(--card-bg)" radius="l" class="p-6"><h1>{i18n(K.games)}</h1><p>{resolveI18nText(gamesConfig.description,K.gamesBanner)}</p></Card>
+<Card color="var(--card-bg)" radius="l" class="p-6"><section><h2>{i18n(K.gamesRecent)}</h2><div class="tiles">{recent.map(game=><GameTile game={game}/>)}</div></section></Card>
+<Card color="var(--card-bg)" radius="l" class="p-6"><section><h2>{i18n(K.gamesRecommended)}</h2>{(["S+","S"] as const).map(grade=>{const entries=recommended.filter(g=>g.data.grade===grade);return entries.length>0&&<div class="tier"><h3><GameGrade grade={grade}/></h3><div class="tiles">{entries.map(game=><GameTile game={game}/>)}</div></div>})}</section></Card>
 </div></MainGridLayout>
 <style>
-.overview{padding:var(--m3e-space-4)}h1{font:var(--m3e-type-headline-medium)}h2{font:var(--m3e-type-title-large);margin-bottom:var(--m3e-space-4)}section{margin-top:var(--m3e-space-6)}
+.overview{display:grid;gap:var(--m3e-space-4);min-width:0}h1{font:var(--m3e-type-headline-medium)}h2{font:var(--m3e-type-title-large);margin-bottom:var(--m3e-space-4)}section{min-width:0}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:var(--m3e-space-4);align-items:start}.tiles>a{max-width:160px}.tier{display:grid;grid-template-columns:3rem minmax(0,1fr);gap:var(--m3e-space-4);padding-block:var(--m3e-space-4);border-top:1px solid var(--outline-variant)}
 @media(max-width:480px){.tier{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--m3e-space-3)}}
 </style>

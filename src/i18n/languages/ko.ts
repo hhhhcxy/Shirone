@@ -2,6 +2,7 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const ko: Translation = {
+	[Key.gamesAll]: "전체",
 	[Key.gamesOverview]: "개요",
 	[Key.gamesService]: "서비스형",
 	[Key.gamesProduct]: "제품형",

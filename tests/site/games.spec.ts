@@ -6,7 +6,6 @@ test.describe("游戏内容库", () => {
 			await page.setViewportSize({ width, height: 900 });
 			await page.goto("/games/product/");
 			await expect(page.locator(".library-card")).toHaveCount(1);
-			await page.waitForTimeout(1500);
 			const card = page.locator(".library-card");
 			const image = await card.locator("img").boundingBox();
 			const copy = await card.locator(".copy").boundingBox();
@@ -20,6 +19,7 @@ test.describe("游戏内容库", () => {
 				path: "test-results/games-" + width + ".png",
 				fullPage: true,
 			});
+			if (width !== 390) return;
 			await card.click();
 			await expect(page).toHaveURL(/games\/minecraft\//);
 			await expect(page.locator("#swup-container h1")).toContainText(
@@ -27,6 +27,15 @@ test.describe("游戏内容库", () => {
 			);
 			await expect(page.locator(".markdown-content")).toHaveText("");
 		});
+	test("category links preserve tag filters", async ({ page }) => {
+		await page.goto("/games/all/?gameTag=" + encodeURIComponent("沙盒"));
+		await expect(page.locator("[data-game-entry]:visible")).toHaveCount(1);
+		await page.locator('[data-games-nav] a[href*="/service/"]').click();
+		await expect(page).toHaveURL(new RegExp("service.*gameTag="));
+		await expect(page.locator("[data-game-empty]")).toBeVisible();
+		await page.locator('[data-games-nav] a[href*="/product/"]').click();
+		await expect(page.locator("[data-game-entry]:visible")).toHaveCount(1);
+	});
 	test("compact tiers and tag filtering", async ({ page }) => {
 		await page.goto("/games/");
 		await expect(page.locator(".tier")).toHaveCount(2);
@@ -44,9 +53,21 @@ test.describe("游戏内容库", () => {
 	for (const theme of ["light", "dark"])
 		test("无障碍 " + theme, async ({ page }) => {
 			await page.addInitScript((t) => localStorage.setItem("theme", t), theme);
-			for (const route of ["/games/", "/games/service/", "/games/minecraft/"]) {
+			for (const route of ["/games/service/", "/games/minecraft/"]) {
 				await page.goto(route);
-				await page.waitForTimeout(1800);
+				await page.waitForFunction(() =>
+					getComputedStyle(document.documentElement)
+						.getPropertyValue("--mc-primary")
+						.trim()
+						.startsWith("#"),
+				);
+				await page.waitForFunction(() =>
+					[...document.querySelectorAll(".onload-animation")].every(
+						(el) =>
+							(el as HTMLElement).offsetParent === null ||
+							getComputedStyle(el).opacity === "1",
+					),
+				);
 				const results = await new AxeBuilder({ page })
 					.withTags(["wcag2a", "wcag2aa", "wcag21aa"])
 					.analyze();

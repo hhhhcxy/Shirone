@@ -1,4 +1,5 @@
 enum I18nKey {
+	gamesAll = "gamesAll",
 	gamesOverview = "gamesOverview",
 	gamesService = "gamesService",
 	gamesProduct = "gamesProduct",

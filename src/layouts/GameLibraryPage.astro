@@ -13,7 +13,7 @@ import {getMarkdownStylesheetAssets} from "@utils/markdown-assets";
 import K from "@i18n/i18nKey";import {i18n} from "@i18n/translation";import {url} from "@utils/url-utils";
 interface Props {game?:LibraryGame;games:LibraryGame[];kind:string}
 const {game,games,kind}=Astro.props;
-const title=game?.data.title??i18n(kind==="service"?K.gamesService:K.gamesProduct);
+const title=game?.data.title??i18n(kind==="all"?K.gamesAll:kind==="service"?K.gamesService:K.gamesProduct);
 const rendered=game?await render(game):undefined;const Content=rendered?.Content;
 const assets=rendered?await getMarkdownStylesheetAssets(rendered.remarkPluginFrontmatter.markdownSyntaxes):[];
 ---

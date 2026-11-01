@@ -55,3 +55,5 @@ Shirone is a blog theme built with Astro 7, Svelte 5, Tailwind 4, Stylus, and pn
 - Motion primitives live in `src/utils/motion.ts` (`fadeOutThenHide`, `flipFromRect`, `revealIn`, `collapse`); `prefersReducedMotion()` must be honored.
 - Atom inventory and count are authoritative only in `src/components/atoms/manifest.json`; do not maintain a second hard-coded count in instructions or prose.
 - Canonical page templates are under `src/layouts/`; `src/components/layout/` is not a parallel template layer.
+
+Targeted validation: scan only affected routes in a11y.spec.ts (use --grep); do not run all site fragments for a local change. Keep full suites for shared/global changes. Reuse successful checks until relevant code changes.

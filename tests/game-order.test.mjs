@@ -46,7 +46,7 @@ test("recommendations use grade then author order then slug", () => {
 });
 import { validateGameSlug } from "../src/utils/game-order.ts";
 test("reject reserved and malformed slugs", () => {
-	for (const id of ["service", "product", "a/b", "A"])
+	for (const id of ["all", "service", "product", "a/b", "A"])
 		assert.throws(() => validateGameSlug(id));
 	validateGameSlug("minecraft");
 });

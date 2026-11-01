@@ -2,6 +2,7 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const vi: Translation = {
+	[Key.gamesAll]: "Tất cả",
 	[Key.gamesOverview]: "Tổng quan",
 	[Key.gamesService]: "Dịch vụ",
 	[Key.gamesProduct]: "Sản phẩm",

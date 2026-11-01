@@ -2,6 +2,7 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const zh_TW: Translation = {
+	[Key.gamesAll]: "全部",
 	[Key.gamesOverview]: "概覽",
 	[Key.gamesService]: "服務型",
 	[Key.gamesProduct]: "產品型",

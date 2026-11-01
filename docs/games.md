@@ -17,3 +17,8 @@ config/games.yaml 的 enable 控制整个板块，description 是概览页简述
 在 games 配置中设置 recentIds 和 recommendationIds 为游戏 slug 数组，数组顺序为手动顺序；省略则使用自动选择，空数组表示不展示。榜单仅展示 S+、S，按 frontmatter 评级分组，不设置第二份评级。无效引用和重复 slug 不显示，草稿不入选。小卡片只展示封面与名称。
 
 侧栏添加 type: gameTags、pages: [games]、enable: true、slot: sticky 即可显示独立游戏标签；桌面在侧栏，手机随侧栏放到正文之后。标签使用 gameTag 查询参数，不进入文章分类与标签。游戏详情采用阅读卡片与紧凑资料头，Markdown 为评测主体。
+
+## Steam import
+Run `node scripts/steam/sync.mjs <content-root>` manually with Node 24. The content root `.env` may contain `STEAM_WEB_API_KEY`; the process environment takes precedence. Keep this file ignored. The numeric Steam profile URL is read from `config/profile.yaml`. New entries are drafts, with provisional product classification; review classification, tags and publication before enabling. Existing entries are matched by steamAppId and only hours/available lastPlayed are updated. Markdown, grades and editorial fields are preserved. Missing/private responses never delete content. The command is independent of build and deployment.
+
+Game navigation includes overview, all, service and product. Tags always show library-wide counts; category switches preserve the selected tag. `/games/all/` is reserved. Recommendation tiers remain S+ and S; imported records do not receive invented grades.

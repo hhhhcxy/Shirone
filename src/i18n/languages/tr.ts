@@ -2,6 +2,7 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const tr: Translation = {
+	[Key.gamesAll]: "Tümü",
 	[Key.gamesOverview]: "Genel bakış",
 	[Key.gamesService]: "Canlı hizmet",
 	[Key.gamesProduct]: "Ürün",

@@ -83,6 +83,7 @@ test("game banner copy stays hidden across article navigation", async ({
 	page,
 	request,
 }) => {
+	await page.emulateMedia({ reducedMotion: "reduce" });
 	const response = await request.get("/games/minecraft/");
 	expect(await response.text()).toContain('data-copy-mode="none"');
 	await page.goto("/games/");
@@ -95,15 +96,16 @@ test("game banner copy stays hidden across article navigation", async ({
 		const a = document.createElement("a");
 		a.href = "/posts/guide/";
 		a.textContent = "Review test article";
-		el.append(a);
+		el.prepend(a);
 	});
 	await page.getByRole("link", { name: "Review test article" }).click();
 	await expect(page).toHaveURL(/posts\/guide/);
+	await expect(page.locator("#swup-container")).toHaveAttribute("data-current-page", "post");
 	await page.locator("#swup-container").evaluate((el) => {
 		const a = document.createElement("a");
 		a.href = "/games/minecraft/";
 		a.textContent = "Review test game";
-		el.append(a);
+		el.prepend(a);
 	});
 	await page.getByRole("link", { name: "Review test game" }).click();
 	await expect(page.locator("[data-game-no-review]")).toBeVisible();

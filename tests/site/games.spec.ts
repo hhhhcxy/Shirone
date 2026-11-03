@@ -1,5 +1,19 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+test("failed game covers preserve the frame on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/games/minecraft/");
+  const frame = page.locator(".game-info .game-cover");
+  const before = await frame.boundingBox();
+  await frame.locator("img").evaluate((img: HTMLImageElement) => {
+    img.src = "/missing-game-cover.jpg";
+  });
+  await expect(frame.locator("img")).toHaveAttribute("data-failed", "");
+  const after = await frame.boundingBox();
+  expect(after?.width).toBe(before?.width);
+  expect(after?.height).toBe(before?.height);
+  await expect(page.locator("body")).toHaveAttribute("data-banner-visible", "true");
+});
 test.describe("游戏内容库", () => {
 	for (const width of [360, 390, 1280])
 		test("横向卡片 " + width, async ({ page }) => {

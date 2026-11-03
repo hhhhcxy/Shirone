@@ -148,7 +148,7 @@ test.describe("banner wallpaper", () => {
 		expect(
 			resolveBannerState({ ...base, viewport: "mobile", page: "post" })
 				.copyMode,
-		).toBeNull();
+		).toBe("context");
 	});
 
 	test("server response includes article banner context", async ({
@@ -434,26 +434,14 @@ test.describe("banner wallpaper", () => {
 		await expectRouteProgressAtAppBarBottom(page);
 	});
 
-	test("mobile post hides wallpaper and keeps compact content geometry", async ({
-		page,
-	}) => {
-		await page.setViewportSize({ width: 390, height: 844 });
-		const requests: string[] = [];
-		page.on("request", (request) => {
-			if (isBannerAsset(request.url())) requests.push(request.url());
-		});
-
-		await page.goto("/posts/guide/", { waitUntil: "domcontentloaded" });
-		await waitForBannerState(page, false);
-		await expect(page.locator("#banner-wrapper")).toBeHidden();
-		await expect(page.locator(".banner-waves")).toBeHidden();
-		await expectCompactTop(page);
-		await expect(page.locator("#navbar")).not.toHaveClass(
-			/top-app-bar--transparent/,
-		);
-		await expectRouteProgressAtAppBarBottom(page);
-		expect(requests).toEqual([]);
-	});
+	test("mobile post retains wallpaper and banner geometry", async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.goto("/posts/guide/", { waitUntil: "domcontentloaded" });
+        await waitForBannerState(page, true);
+        await expect(page.locator("#banner-wrapper")).toBeVisible();
+        await expect(page.locator("body")).toHaveAttribute("data-banner-layout", "banner");
+        await expectBannerOverlap(page);
+    });
 
 	test("mobile home loads only mobile image resources", async ({ page }) => {
 		await page.setViewportSize({ width: 390, height: 844 });
@@ -799,7 +787,7 @@ test.describe("banner wallpaper", () => {
 		}
 	});
 
-	test("Swup home to post removes mobile wallpaper without leaving a gap", async ({
+	test("Swup home to post retains mobile wallpaper and content geometry", async ({
 		page,
 	}) => {
 		await page.setViewportSize({ width: 390, height: 844 });
@@ -819,9 +807,9 @@ test.describe("banner wallpaper", () => {
 				document.getElementById("swup-container")?.dataset.currentPage ===
 				"post",
 		);
-		await waitForBannerState(page, false);
+		await waitForBannerState(page, true);
 		await expect(page.locator(".banner-waves")).toHaveCount(1);
-		await expect(page.locator(".banner-waves")).toBeHidden();
-		await expectCompactTop(page);
+		await expect(page.locator(".banner-waves")).toBeVisible();
+		await expectBannerOverlap(page);
 	});
 });

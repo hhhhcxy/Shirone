@@ -5,6 +5,7 @@ import { defineConfig } from "@playwright/test";
  * 说明：测试针对 Astro 开发服务器上的 atoms-*-test 页面（组件库验证页）。
  * 复用系统 Chrome（channel: chrome），避免额外下载浏览器。
  */
+const port = Number(process.env.SHIRONE_TEST_PORT || 4321);
 export default defineConfig({
 	testDir: "./tests",
 	timeout: 30_000,
@@ -17,7 +18,7 @@ export default defineConfig({
 	retries: 0,
 	reporter: [["list"]],
 	use: {
-		baseURL: "http://localhost:4321",
+		baseURL: `http://localhost:${port}`,
 		channel: "chrome",
 		viewport: { width: 1280, height: 900 },
 		trace: "retain-on-failure",
@@ -25,9 +26,9 @@ export default defineConfig({
 	webServer: {
 		command:
 			process.platform === "win32"
-				? "pnpm.cmd astro dev --port 4321 --host"
-				: "pnpm astro dev --port 4321 --host",
-		url: "http://localhost:4321",
+				? `pnpm.cmd astro dev --port ${port} --host`
+				: `pnpm astro dev --port ${port} --host`,
+		url: `http://localhost:${port}`,
 		reuseExistingServer: true,
 		timeout: 120_000,
 		env: {

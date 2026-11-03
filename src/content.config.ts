@@ -133,6 +133,7 @@ const gamesCollection = defineCollection({
 		summary: z.string().default(""),
 		cover: z.string().default(""),
 		steamAppId: z.number().int().positive().optional(),
+		aliases: z.array(z.string()).default([]),
 		links: z
 			.array(
 				z.object({

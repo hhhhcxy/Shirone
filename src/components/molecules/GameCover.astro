@@ -1,0 +1,15 @@
+---
+interface Props { src: string }
+const { src } = Astro.props;
+---
+<span class="game-cover" aria-hidden="true">
+  {src && <img data-game-cover src={src} alt="" loading="lazy" width="160" height="100" />}
+</span>
+<style>
+.game-cover{display:block;width:100%;aspect-ratio:8/5;overflow:hidden;border-radius:var(--shape-corner-m);background:var(--surface-container-high)}
+img{display:block;width:100%;height:100%;object-fit:cover}
+img[data-failed]{visibility:hidden}
+</style>
+<script>
+  import "@utils/game-cover";
+</script>

@@ -1,7 +1,9 @@
 ---
 import GameLibraryPage from "@layouts/GameLibraryPage.astro";
-import {getGames} from "@utils/game-library";
+import {url} from "@utils/url-utils";
+import {getGames,gameAliases} from "@utils/game-library";
 import {gamesConfig} from "@/config/gamesConfig";
-export async function getStaticPaths(){if(!gamesConfig.enable)return [];const games=await getGames();return [...["all","service","product"].map(kind=>({params:{slug:kind},props:{games:games.filter(g=>kind==="all"||g.data.kind===kind),game:undefined,kind}})),...games.map(game=>({params:{slug:game.id},props:{game,games:[],kind:game.data.kind}}))]}
+export async function getStaticPaths(){if(!gamesConfig.enable)return [];const games=await getGames();return [...["all","service","product"].map(kind=>({params:{slug:kind},props:{games:games.filter(g=>kind==="all"||g.data.kind===kind),game:undefined,kind}})),...games.flatMap(game=>[{params:{slug:game.id},props:{game,games:[],kind:game.data.kind,redirect:undefined}},...gameAliases(game).map(alias=>({params:{slug:alias},props:{game,games:[],kind:game.data.kind,redirect:url("/games/"+game.id+"/")}}))])]}
+if (Astro.props.redirect) return Astro.redirect(Astro.props.redirect, 301);
 ---
 <GameLibraryPage {...Astro.props}/>

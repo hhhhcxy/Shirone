@@ -28,8 +28,7 @@ export function resolveBannerState(input: BannerStateInput): BannerState {
 	const isHome = input.page === "home";
 	const visible =
 		input.mode === "banner" &&
-		input.imageCount > 0 &&
-		(input.viewport === "desktop" || isHome);
+		input.imageCount > 0;
 
 	const copyMode: BannerCopyMode =
 		!visible || input.page === "games" ? null : isHome ? "home" : "context";

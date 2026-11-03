@@ -169,7 +169,6 @@ const initialSrc = initialDesktopSrc || initialMobileSrc;
 const initialDesktopImage = desktopLightResponsive[0];
 const initialMobileImage = mobileLightResponsive[0];
 const initialImage = initialDesktopImage ?? initialMobileImage;
-const initialMobileBanner = page === "home";
 ---
 
 <section
@@ -205,18 +204,18 @@ const initialMobileBanner = page === "home";
 			{initialDesktopImage && !initialDesktopImage.avifSrcset && !initialDesktopImage.webpSrcset && (
 				<source media="(min-width: 1024px)" srcset={initialDesktopImage.fallback} />
 			)}
-			{initialMobileBanner && initialMobileImage?.avifSrcset && (
+			{initialMobileImage?.avifSrcset && (
 				<source media="(max-width: 1023.98px)" type="image/avif" srcset={initialMobileImage.avifSrcset} sizes="100vw" />
 			)}
-			{initialMobileBanner && initialMobileImage?.webpSrcset && (
+			{initialMobileImage?.webpSrcset && (
 				<source media="(max-width: 1023.98px)" type="image/webp" srcset={initialMobileImage.webpSrcset} sizes="100vw" />
 			)}
-			{initialMobileBanner && initialMobileImage && !initialMobileImage.avifSrcset && !initialMobileImage.webpSrcset && (
+			{initialMobileImage && !initialMobileImage.avifSrcset && !initialMobileImage.webpSrcset && (
 				<source media="(max-width: 1023.98px)" srcset={initialMobileImage.fallback} />
 			)}
 			<img
 				class="banner-stage__image banner-stage__image--front banner-stage__image--active"
-				src={initialMobileBanner ? initialSrc || undefined : undefined}
+				src={initialSrc || undefined}
 				width={initialImage?.width}
 				height={initialImage?.height}
 				fetchpriority="high"
@@ -1163,9 +1162,6 @@ const initialMobileBanner = page === "home";
 		display: none
 
 	@media (max-width: 1023.98px)
-		:global(body:not([data-current-page="home"])) .banner-stage
-			display: none
-
 		.banner-stage
 			&__copy h1
 				font-size: 2.75rem

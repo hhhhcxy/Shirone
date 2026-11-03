@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { gameSlug } from './game-metadata.mjs';
 import path from 'node:path';
 import { parseEnv } from 'node:util';
 const root=path.resolve(process.argv[2]??'.');
@@ -17,15 +18,17 @@ if(!Array.isArray(response?.games))throw Error('Steam returned no visible librar
 const dir=path.join(root,'content/games');await fs.mkdir(dir,{recursive:true});
 const existing=new Map();
 for(const item of await fs.readdir(dir,{withFileTypes:true}))if(item.isDirectory()) { const file=path.join(dir,item.name,'index.md');try{const text=await fs.readFile(file,'utf8');const id=text.match(/^steamAppId:\s*(\d+)/m)?.[1];if(id)existing.set(Number(id),{file,text});}catch(e){if(e.code!=='ENOENT')throw e;} }
+const occupied = new Set(await fs.readdir(dir));
 let created=0,updated=0;
 for(const game of response.games) {
  const hours=Math.round(game.playtime_forever/6)/10;
  const date=game.rtime_last_played>0?new Date(game.rtime_last_played*1000).toISOString().slice(0,10):null;
  const old=existing.get(game.appid);
  if(old){let text=old.text;const end=text.indexOf('\n---',3);let head=text.slice(0,end);for(const [name,value]of Object.entries({hours,lastPlayed:date})){if(value===null)continue;const re=new RegExp('^'+name+':.*$','m');head=re.test(head)?head.replace(re,name+': '+value):head+'\n'+name+': '+value;}await fs.writeFile(old.file,head+text.slice(end));updated++;continue;}
- const folder=path.join(dir,'steam-'+game.appid);await fs.mkdir(folder,{recursive:true});
+ const slug=gameSlug(game.name,game.appid,occupied);occupied.add(slug);
+ const folder=path.join(dir,slug);await fs.mkdir(folder,{recursive:true});
  let cover='';try{const r=await fetch('https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/'+game.appid+'/header.jpg',{signal:AbortSignal.timeout(15000)});if(r.ok&&r.headers.get('content-type')?.startsWith('image/')){await fs.writeFile(path.join(folder,'cover.jpg'),Buffer.from(await r.arrayBuffer()));cover='./cover.jpg';}}catch{}
- const text=['---','title: '+JSON.stringify(game.name),'kind: product','status: 待整理','hours: '+hours,...(date?['lastPlayed: '+date]:[]),'platforms: [Steam]','tags: []','summary: ""','steamAppId: '+game.appid,'cover: '+JSON.stringify(cover),'links:','  - label: Steam','    url: https://store.steampowered.com/app/'+game.appid+'/','draft: true','---','',''].join('\n');
+ const text=['---','title: '+JSON.stringify(game.name),'kind: product','status: ""','hours: '+hours,...(date?['lastPlayed: '+date]:[]),'platforms: [Steam]','tags: []','summary: ""','steamAppId: '+game.appid,'cover: '+JSON.stringify(cover),'links:','  - label: Steam','    url: https://store.steampowered.com/app/'+game.appid+'/','draft: true','---','',''].join('\n');
  await fs.writeFile(path.join(folder,'index.md'),text);created++;
 }
 console.log(JSON.stringify({received:response.games.length,created,updated}));

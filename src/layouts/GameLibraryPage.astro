@@ -1,4 +1,5 @@
 ---
+import GameCover from "@components/molecules/GameCover.astro";
 import GameGrade from "@components/molecules/GameGrade.astro";
 import Card from "@components/atoms/display/Card.svelte";
 import AccentBar from "@components/atoms/display/AccentBar.svelte";
@@ -23,7 +24,7 @@ const assets=rendered?await getMarkdownStylesheetAssets(rendered.remarkPluginFro
 {game?<Card color="var(--card-bg)" radius="l" class="px-6 md:px-9 pt-6 pb-6">
 <article class="game-review" data-game-kind={kind} data-pagefind-body><header>
 <h1 data-pagefind-meta="title" data-pagefind-weight="10"><AccentBar size="large"/>{title}</h1>
-<div class="game-info">{game.coverUrl&&<img src={game.coverUrl} alt="" width="160" height="100"/>}
+<div class="game-info"><span class="cover"><GameCover src={game.coverUrl}/></span>
 <div><p><GameGrade grade={game.data.grade}/> {game.data.status} {game.data.hours!==undefined&&<span> · {game.data.hours} {i18n(K.gamesHours)}</span>}</p>
 <p>{game.data.platforms.join(" · ")}</p><p>{game.data.summary}</p>
 <div class="game-links">{game.data.tags.map(tag=><a href={url('/games/'+kind+'/')+'?gameTag='+encodeURIComponent(tag)}>{tag}</a>)}</div>
@@ -37,6 +38,6 @@ const assets=rendered?await getMarkdownStylesheetAssets(rendered.remarkPluginFro
 </MainGridLayout>
 <style>
 h1{font:var(--m3e-type-headline-medium);margin-bottom:var(--m3e-space-4)}.game-review h1{display:flex;align-items:center;gap:var(--m3e-space-3);font:var(--m3e-type-headline-large);overflow-wrap:anywhere}
-.list{display:grid;gap:var(--m3e-space-4)}.game-info{display:flex;gap:var(--m3e-space-4);align-items:start;margin-block:var(--m3e-space-6);padding-bottom:var(--m3e-space-6);border-bottom:1px dashed var(--outline-variant)}.game-info img{width:clamp(84px,22%,160px);height:auto;aspect-ratio:8/5;object-fit:cover;border-radius:var(--shape-corner-m)}.game-info>div{min-width:0;flex:1}.game-info p{margin-bottom:var(--m3e-space-2);overflow-wrap:anywhere}.game-links{display:flex;flex-wrap:wrap;gap:var(--m3e-space-3);margin-top:var(--m3e-space-3)}.game-links a,footer a{color:var(--primary);text-decoration:underline}.review-toc{margin-bottom:var(--m3e-space-6)}footer{border-top:1px solid var(--outline-variant);padding-top:var(--m3e-space-4)}[data-game-entry][hidden]{display:none}
+.list{display:grid;gap:var(--m3e-space-4)}.game-info{display:flex;gap:var(--m3e-space-4);align-items:start;margin-block:var(--m3e-space-6);padding-bottom:var(--m3e-space-6);border-bottom:1px dashed var(--outline-variant)}.game-info .cover{width:clamp(84px,22%,160px);height:auto;aspect-ratio:8/5;object-fit:cover;border-radius:var(--shape-corner-m)}.game-info>div{min-width:0;flex:1}.game-info p{margin-bottom:var(--m3e-space-2);overflow-wrap:anywhere}.game-links{display:flex;flex-wrap:wrap;gap:var(--m3e-space-3);margin-top:var(--m3e-space-3)}.game-links a,footer a{color:var(--primary);text-decoration:underline}.review-toc{margin-bottom:var(--m3e-space-6)}footer{border-top:1px solid var(--outline-variant);padding-top:var(--m3e-space-4)}[data-game-entry][hidden]{display:none}
 </style>
 <script>import "@utils/game-filter";</script>

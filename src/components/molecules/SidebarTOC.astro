@@ -45,6 +45,9 @@ const tocHeadings = headings.map((heading) => ({
 	</div>
 </WidgetLayout>
 
+<style is:global>
+body[data-current-page="games"] .sidebar-widget:has(#toc):not(:has(#toc a)) { display: none; }
+</style>
 <style lang="stylus">
 .sidebar-toc__content
 	max-height: calc(100dvh - 15rem)

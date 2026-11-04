@@ -10,6 +10,7 @@ export interface BannerStateInput {
 	mode: WallpaperMode;
 	page: SidebarPage | undefined;
 	viewport: BannerViewport;
+	gameDetail?: boolean;
 	imageCount: number;
 	carouselEnabled: boolean;
 	reducedMotion: boolean;
@@ -31,7 +32,7 @@ export function resolveBannerState(input: BannerStateInput): BannerState {
 		input.imageCount > 0;
 
 	const copyMode: BannerCopyMode =
-		!visible || input.page === "games" ? null : isHome ? "home" : "context";
+		!visible || (input.page === "games" && !input.gameDetail) ? null : isHome ? "home" : "context";
 
 	return {
 		visible,

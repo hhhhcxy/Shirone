@@ -2,6 +2,7 @@ import Key from "../i18nKey-runtime.mjs";
 import type { Translation } from "../translation.ts";
 
 export const es: Translation = {
+	[Key.gamesReviews]: "Reseñas",
 	[Key.gamesNoReview]: "Todavía no hay reseña",
 	[Key.gamesReviewSource]: "Reseña original de Steam",
 	[Key.gamesAll]: "Todos",

@@ -5,4 +5,4 @@ import K from "@i18n/i18nKey";import {i18n} from "@i18n/translation";import {url
 interface Props {kind?:string}
 const {kind}=Astro.props;
 ---
-<nav data-games-nav aria-label={i18n(K.games)} class="mb-4"><Card color="var(--card-bg)" radius="l" class="p-2"><div class="flex gap-2 overflow-x-auto">{[["",K.gamesOverview],["all",K.gamesAll],["service",K.gamesService],["product",K.gamesProduct]].map(([path,key])=><Chip href={url('/games/'+(path?path+'/':''))} variant="tonal" selected={kind===path||(!kind&&!path)}>{i18n(key as K)}</Chip>)}</div></Card></nav>
+<nav data-games-nav aria-label={i18n(K.games)} class="mb-4"><Card color="var(--card-bg)" radius="l" class="p-2"><div class="flex gap-2 overflow-x-auto">{[["",K.gamesOverview],["all",K.gamesAll],["categories",K.categories],["tags",K.tags],["reviews",K.gamesReviews]].map(([path,key])=><Chip href={url('/games/'+(path?path+'/':''))} variant="tonal" selected={(path==="categories" && (kind==="product" || kind==="service"))||kind===path||(!kind&&!path)}>{i18n(key as K)}</Chip>)}</div></Card></nav>

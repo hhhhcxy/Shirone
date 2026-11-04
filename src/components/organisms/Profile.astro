@@ -1,5 +1,6 @@
 ---
 import { getImage } from "astro:assets";
+import ContactCopy from "@components/molecules/ContactCopy.svelte";
 import Button from "@components/atoms/action/Button.svelte";
 import IconButton from "@components/atoms/action/IconButton.svelte";
 import Avatar from "@components/atoms/display/Avatar.svelte";
@@ -94,6 +95,7 @@ if (typeof avatarAsset !== "string") {
                 <Icon icon={config.links[0].icon} class="text-[1.5rem]"></Icon>
                 {config.links[0].name}
             </Button>}
+            {config.contacts?.filter(item => item.value.trim()).map(item => <ContactCopy {...item} client:visible/>)}
         </div>
         <UmamiStats variant="profile" />
     </div>

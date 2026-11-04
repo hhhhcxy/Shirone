@@ -25,7 +25,7 @@ export function recommendedGames(games: LibraryGame[]): LibraryGame[] {
 export function validateGameSlug(id: string): void {
 	if (
 		!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id) ||
-		["all", "service", "product"].includes(id)
+		["all", "service", "product", "reviews", "categories", "tags"].includes(id)
 	)
 		throw new Error("Invalid or reserved game slug: " + id);
 }

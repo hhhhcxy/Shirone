@@ -34,7 +34,7 @@ test.describe("游戏内容库", () => {
 				fullPage: true,
 			});
 			if (width !== 390) return;
-			await card.click();
+			await card.locator("h2 a").click();
 			await expect(page).toHaveURL(/games\/minecraft\//);
 			await expect(page.locator("#swup-container h1")).toContainText(
 				"Minecraft",
@@ -42,16 +42,18 @@ test.describe("游戏内容库", () => {
 			await expect(page.locator("[data-game-no-review]")).toBeVisible();
 			await expect(page.locator("#banner-wrapper")).toHaveAttribute(
 				"data-copy-mode",
-				"none",
+				"context",
 			);
 		});
 	test("category links preserve tag filters", async ({ page }) => {
 		await page.goto("/games/all/?gameTag=" + encodeURIComponent("沙盒"));
 		await expect(page.locator("[data-game-entry]:visible")).toHaveCount(1);
-		await page.locator('[data-games-nav] a[href*="/service/"]').click();
+		await page.locator('[data-games-nav] a[href*="/categories/"]').click();
+		await page.locator('.taxonomy [data-game-category][href*="/service/"]').click();
 		await expect(page).toHaveURL(new RegExp("service.*gameTag="));
 		await expect(page.locator("[data-game-empty]")).toBeVisible();
-		await page.locator('[data-games-nav] a[href*="/product/"]').click();
+		await page.locator('[data-games-nav] a[href*="/categories/"]').click();
+		await page.locator('.taxonomy [data-game-category][href*="/product/"]').click();
 		await expect(page.locator("[data-game-entry]:visible")).toHaveCount(1);
 	});
 	test("compact tiers and tag filtering", async ({ page }) => {
@@ -93,13 +95,13 @@ test.describe("游戏内容库", () => {
 			}
 		});
 });
-test("game banner copy stays hidden across article navigation", async ({
+test("game detail banner follows article navigation", async ({
 	page,
 	request,
 }) => {
 	await page.emulateMedia({ reducedMotion: "reduce" });
 	const response = await request.get("/games/minecraft/");
-	expect(await response.text()).toContain('data-copy-mode="none"');
+	expect(await response.text()).toContain('data-copy-mode="context"');
 	await page.goto("/games/");
 	await expect(page.locator("#banner-wrapper")).toHaveAttribute(
 		"data-copy-mode",
@@ -125,6 +127,6 @@ test("game banner copy stays hidden across article navigation", async ({
 	await expect(page.locator("[data-game-no-review]")).toBeVisible();
 	await expect(page.locator("#banner-wrapper")).toHaveAttribute(
 		"data-copy-mode",
-		"none",
+		"context",
 	);
 });

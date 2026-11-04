@@ -147,6 +147,7 @@ export type Favicon = {
 };
 
 export type ProfileConfig = {
+	contacts?: { kind: "phone" | "qq" | "email"; label: string; value: string }[];
 	avatar?: string;
 	name: string;
 	bio?: string;

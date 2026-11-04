@@ -2,7 +2,7 @@ export function gameSlug(title, appid, occupied = new Set()) {
   const stem = title.split(' / ')[0].replace(/[™®©]/g, '').normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   let slug = stem || `steam-${appid}`;
-  if (occupied.has(slug) || ['all', 'service', 'product'].includes(slug)) slug += `-${appid}`;
+  if (occupied.has(slug) || ['all', 'service', 'product', 'reviews', 'categories', 'tags'].includes(slug)) slug += `-${appid}`;
   if (occupied.has(slug)) throw new Error(`Duplicate game directory: ${slug}`);
   return slug;
 }

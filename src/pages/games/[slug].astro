@@ -1,9 +1,30 @@
 ---
 import GameLibraryPage from "@layouts/GameLibraryPage.astro";
 import {url} from "@utils/url-utils";
-import {getGames,gameAliases} from "@utils/game-library";
+import {getGames,gameAliases,type LibraryGame} from "@utils/game-library";
 import {gamesConfig} from "@/config/gamesConfig";
-export async function getStaticPaths(){if(!gamesConfig.enable)return [];const games=await getGames();return [...["all","service","product"].map(kind=>({params:{slug:kind},props:{games:games.filter(g=>kind==="all"||g.data.kind===kind),game:undefined,kind}})),...games.flatMap(game=>[{params:{slug:game.id},props:{game,games:[],kind:game.data.kind,redirect:undefined}},...gameAliases(game).map(alias=>({params:{slug:alias},props:{game,games:[],kind:game.data.kind,redirect:url("/games/"+game.id+"/")}}))])]}
+interface Props { games: LibraryGame[]; kind: string; game?: LibraryGame; redirect?: string }
+export async function getStaticPaths() {
+  if (!gamesConfig.enable) return [];
+  const games = await getGames();
+  const collections = ["all", "service", "product", "categories", "tags", "reviews"].map(kind => {
+    let entries = games;
+    if (kind === "service" || kind === "product") entries = games.filter(game => game.data.kind === kind);
+    if (kind === "reviews") entries = games.filter(game => game.body?.trim());
+    return { params: { slug: kind }, props: { games: entries, kind } };
+  });
+  const details = games.flatMap(game => {
+    const props = { game, games: [], kind: game.data.kind };
+    return [
+      { params: { slug: game.id }, props },
+      ...gameAliases(game).map(alias => ({
+        params: { slug: alias },
+        props: { ...props, redirect: url("/games/"+game.id+"/") },
+      })),
+    ];
+  });
+  return [...collections, ...details];
+}
 if (Astro.props.redirect) return Astro.redirect(Astro.props.redirect, 301);
 ---
 <GameLibraryPage {...Astro.props}/>

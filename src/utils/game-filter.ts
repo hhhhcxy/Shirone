@@ -12,8 +12,8 @@ function syncGameTags(): void {
 	)) {
 		const target = new URL(link.href);
 		target.pathname = target.pathname.replace(
-			/\/games\/(all|service|product)\//,
-			"/games/" + (current ?? "all") + "/",
+			/\/games\/(all|service|product|reviews)\//,
+			"/games/" + (current && ["product","service","reviews"].includes(current) ? current : "all") + "/",
 		);
 		link.href = target.href;
 		if (tag === (link.dataset.gameTagLink ?? ""))
@@ -21,10 +21,10 @@ function syncGameTags(): void {
 		else link.removeAttribute("aria-current");
 	}
 	for (const link of document.querySelectorAll<HTMLAnchorElement>(
-		"[data-games-nav] a",
+		"[data-game-category], [data-games-nav] a",
 	)) {
 		const target = new URL(link.href);
-		if (tag && /\/games\/(all|service|product)\/$/.test(target.pathname))
+		if (tag && /\/games\/(categories|reviews|all|service|product)\/$/.test(target.pathname))
 			target.searchParams.set("gameTag", tag);
 		else target.searchParams.delete("gameTag");
 		link.href = target.href;

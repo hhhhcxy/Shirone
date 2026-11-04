@@ -9,19 +9,20 @@ import type { SidebarPage } from "@/types/sidebarConfig";
 
 interface Props {
 	page?: SidebarPage;
+	gameDetail?: boolean;
 	title?: string;
 	description?: string;
 	date?: string;
 }
 
-const { page, title = "", description = "", date = "" } = Astro.props;
+const { page, gameDetail, title = "", description = "", date = "" } = Astro.props;
 const normalizedTitle = title.trim();
 const normalizedDescription = description.trim();
 const initialSupportingText =
 	normalizedDescription !== normalizedTitle ? normalizedDescription : "";
 const initialDate = date.trim();
 const initialCopyMode =
-	page === "games" ? "none" : page === "home" ? "home" : page && normalizedTitle ? "context" : "none";
+	page === "games" && !gameDetail ? "none" : page === "home" ? "home" : page && normalizedTitle ? "context" : "none";
 const initialLabel =
 	initialCopyMode === "context"
 		? normalizedTitle
@@ -916,6 +917,7 @@ const initialImage = initialDesktopImage ?? initialMobileImage;
 		const page = pageOverride ?? currentPage();
 		const state = resolveBannerState({
 			mode: getStoredWallpaperMode(),
+			gameDetail: document.getElementById("swup-container")?.dataset.gameDetail === "true",
 			page,
 			viewport,
 			imageCount: images.length,

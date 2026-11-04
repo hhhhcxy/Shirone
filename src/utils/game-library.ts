@@ -1,3 +1,6 @@
+import K from "@i18n/i18nKey";
+import {i18n} from "@i18n/translation";
+import {url} from "@utils/url-utils";
 import {
 	publishedGames,
 	validateGameSlug,
@@ -52,4 +55,18 @@ async function resolveGameCover(src: string, basePath: string): Promise<string> 
  const resolved = await resolveAsset(src, basePath);
  // A relative path returned unchanged means the asset was not found.
  return resolved === src && src && !/^(?:https?:|data:|\/)/.test(src) ? "" : resolved;
+}
+
+export function gameTaxonomy(games: LibraryGame[]) {
+ const counts = new Map<string,number>();
+ for (const game of games) for (const tag of new Set(game.data.tags)) counts.set(tag,(counts.get(tag) ?? 0)+1);
+ return {
+   categories: (["product","service"] as const).map(kind => ({
+     name:i18n(kind==="product"?K.gamesProduct:K.gamesService), href:url("/games/"+kind+"/"),
+     count:games.filter(game=>game.data.kind===kind).length,
+   })),
+   tags:[...counts].sort(([a],[b])=>a.localeCompare(b)).map(([name,count])=>({
+     name,count,href:url("/games/all/")+"?gameTag="+encodeURIComponent(name),
+   })),
+ };
 }

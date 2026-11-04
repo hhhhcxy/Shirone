@@ -14,9 +14,12 @@ import { getTagUrl, url } from "@utils/url-utils";
 import type { TagsWidget } from "@/types/sidebarConfig";
 import WidgetLayout from "./WidgetLayout.astro";
 
-const tags = await getTagList();
+
 
 interface Props {
+	items?: {name:string;href:string;count:number}[];
+	indexHref?: string;
+	id?: string;
 	class?: string;
 	style?: string;
 	widget?: TagsWidget;
@@ -25,18 +28,15 @@ const className = Astro.props.class;
 const style = Astro.props.style;
 
 const DISPLAY_LIMIT = Math.max(1, Astro.props.widget?.collapseAfter ?? 20);
-const hasOverflow = tags.length > DISPLAY_LIMIT;
-
-const tagItems = tags.slice(0, DISPLAY_LIMIT).map((t) => ({
-	name: t.name.trim(),
-	href: getTagUrl(t.name),
-}));
+const items = Astro.props.items ?? (await getTagList()).map(t=>({...t,href:getTagUrl(t.name)}));
+const hasOverflow = items.length > DISPLAY_LIMIT;
+const visibleItems = items.slice(0,DISPLAY_LIMIT);
 ---
-<WidgetLayout name={i18n(I18nKey.tags)} id="tags" class={className} style={style}>
-	<TagList tags={tagItems} />
+<WidgetLayout name={i18n(I18nKey.tags)} id={Astro.props.id ?? "tags"} class={className} style={style}>
+	<TagList tags={visibleItems} />
 	{hasOverflow && (
 		<div slot="footer" class="widget-index-link">
-			<a href={url("/tags/")} class="m3-state-layer">
+			<a href={Astro.props.indexHref ?? url("/tags/")} class="m3-state-layer">
 				{i18n(I18nKey.tagsViewAll)}
 				<Icon icon="material-symbols:chevron-right-rounded" />
 			</a>

@@ -22,8 +22,9 @@ test.describe("游戏内容库", () => {
 			await expect(page.locator(".library-card")).toHaveCount(1);
 			const card = page.locator(".library-card");
 			const image = await card.locator("img").boundingBox();
-			const copy = await card.locator(".copy").boundingBox();
-			expect(image!.x + image!.width).toBeLessThanOrEqual(copy!.x);
+			const copy = await card.locator(".m3-blog-postcard__title").boundingBox();
+			if (width < 768) expect(image!.y + image!.height).toBeLessThanOrEqual(copy!.y + 1);
+			else expect(image!.x).toBeGreaterThan(copy!.x);
 			expect(
 				await page.evaluate(
 					() => document.documentElement.scrollWidth <= innerWidth,
@@ -34,7 +35,7 @@ test.describe("游戏内容库", () => {
 				fullPage: true,
 			});
 			if (width !== 390) return;
-			await card.locator("h2 a").click();
+			await card.locator(".m3-blog-postcard__title").click();
 			await expect(page).toHaveURL(/games\/minecraft\//);
 			await expect(page.locator("#swup-container h1")).toContainText(
 				"Minecraft",
@@ -49,11 +50,11 @@ test.describe("游戏内容库", () => {
 		await page.goto("/games/all/?gameTag=" + encodeURIComponent("沙盒"));
 		await expect(page.locator("[data-game-entry]:visible")).toHaveCount(1);
 		await page.locator('[data-games-nav] a[href*="/categories/"]').click();
-		await page.locator('.taxonomy [data-game-category][href*="/service/"]').click();
+		await page.locator('.category-index__row[href*="/service/"]').click();
 		await expect(page).toHaveURL(new RegExp("service.*gameTag="));
 		await expect(page.locator("[data-game-empty]")).toBeVisible();
 		await page.locator('[data-games-nav] a[href*="/categories/"]').click();
-		await page.locator('.taxonomy [data-game-category][href*="/product/"]').click();
+		await page.locator('.category-index__row[href*="/product/"]').click();
 		await expect(page.locator("[data-game-entry]:visible")).toHaveCount(1);
 	});
 	test("compact tiers and tag filtering", async ({ page }) => {

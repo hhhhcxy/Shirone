@@ -69,7 +69,6 @@ const {
 			<a
 				class="m3-blog-postmeta__link"
 				href={category.href}
-				aria-label={`View all posts in the ${category.name} category`}
 			>{category.name}</a>
 		) : (
 			<span class="m3-blog-postmeta__text">{uncategorizedLabel}</span>
@@ -94,7 +93,6 @@ const {
 							<a
 								class="m3-blog-postmeta__link"
 								href={t.href}
-								aria-label={`View all posts with the ${t.name} tag`}
 							>{t.name}</a>
 						</Fragment>
 					))}

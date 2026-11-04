@@ -1,4 +1,6 @@
 <script lang="ts">
+import IconButton from "@components/atoms/action/IconButton.svelte";
+import Tooltip from "@components/atoms/overlay/Tooltip.svelte";
 import Icon from "@components/atoms/display/Icon.svelte";
 import K from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
@@ -14,8 +16,6 @@ async function copy() {
   }
 }
 </script>
-<button type="button" class="m3-state-layer" aria-label={label} title={label} onclick={copy}><Icon icon={icons[kind]} class="text-2xl"/></button>
-<style>
-button{display:grid;place-items:center;color:var(--primary);width:2.75rem;height:2.75rem;border-radius:var(--shape-corner-full);cursor:pointer}
-button:focus-visible{outline:2px solid var(--primary)}
-</style>
+<Tooltip {label} placement="top">
+  <IconButton {label} onclick={copy}><Icon icon={icons[kind]} class="text-[1.5rem]"/></IconButton>
+</Tooltip>

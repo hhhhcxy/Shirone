@@ -1,4 +1,7 @@
 ---
+import CategoryIndex from "@components/molecules/CategoryIndex.astro";
+import TagIndex from "@components/molecules/TagIndex.astro";
+import {gameTaxonomy} from "@utils/game-library";
 import GameCover from "@components/molecules/GameCover.astro";
 import GameGrade from "@components/molecules/GameGrade.astro";
 import Card from "@components/atoms/display/Card.svelte";
@@ -16,15 +19,8 @@ interface Props {game?:LibraryGame;games:LibraryGame[];kind:string}
 const {game,games,kind}=Astro.props;
 const labels = { all: K.gamesAll, reviews: K.gamesReviews, tags: K.tags, categories: K.categories, service: K.gamesService, product: K.gamesProduct };
 const title = game?.data.title ?? i18n(labels[kind as keyof typeof labels]);
-const taxonomy = kind === "categories" ? ["product","service"].map(key => ({
-  label: i18n(key === "product" ? K.gamesProduct : K.gamesService),
-  href: url("/games/"+key+"/"),
-  count: games.filter(game => game.data.kind === key).length,
-})) : kind === "tags" ? [...new Set(games.flatMap(game => game.data.tags))].sort().map(tag => ({
-  label: tag,
-  href: url("/games/all/")+"?gameTag="+encodeURIComponent(tag),
-  count: games.filter(game => game.data.tags.includes(tag)).length,
-})) : undefined;
+const taxonomy = (kind==="categories" || kind==="tags") ? gameTaxonomy(games) : undefined;
+const summary = taxonomy ? (kind==="categories" ? taxonomy.categories.length+" "+i18n(K.categoriesCount) : taxonomy.tags.length+" "+i18n(K.tagsCount))+" · "+i18n(K.games)+" "+games.length : "";
 const rendered=game?await render(game):undefined;const Content=rendered?.Content;
 const assets=rendered?await getMarkdownStylesheetAssets(rendered.remarkPluginFrontmatter.markdownSyntaxes):[];
 ---
@@ -45,25 +41,19 @@ const assets=rendered?await getMarkdownStylesheetAssets(rendered.remarkPluginFro
 {game.data.steamReviewUrl&&<p class="mb-6"><a href={game.data.steamReviewUrl} target="_blank" rel="noopener noreferrer">{i18n(K.gamesReviewSource)}</a></p>}
 <footer><a href={url('/games/'+kind+'/')}>{i18n(kind==="service"?K.gamesService:K.gamesProduct)}</a></footer>
 </article></Card>:
-<section class="p-4"><h1>{title}</h1>
-  {taxonomy ? <div class="taxonomy">{taxonomy.map(item =>
-    <a data-game-category={kind==="categories"?true:undefined} href={item.href}>{item.label} <span>{item.count}</span></a>
-  )}</div> : <>
+taxonomy ? (kind==="categories" ? <CategoryIndex categories={taxonomy.categories} {summary}/> : <TagIndex tags={taxonomy.tags} {summary}/>) :
+<section><h1 class="px-4">{title}</h1>
+    <div data-game-filter-summary hidden class="filter-status"><span data-game-filter-text></span> <a href={url("/games/"+kind+"/")}>{i18n(K.clear)}</a></div>
     <div class="list" data-game-kind={kind}>{games.map(entry =>
       <div data-game-entry data-tags={JSON.stringify(entry.data.tags)}>
         <LibraryCard game={entry} reviewList={kind==="reviews"}/>
       </div>
     )}</div>
     <p data-game-empty hidden={games.length>0}>{i18n(K.gamesNoResults)}</p>
-  </>}
 </section>}
 </MainGridLayout>
 <style>
-.taxonomy{display:flex;flex-wrap:wrap;gap:var(--m3e-space-3)}
-.taxonomy a{display:inline-flex;gap:var(--m3e-space-3);align-items:center;background:var(--surface-container);border-radius:var(--shape-corner-m);padding:var(--m3e-space-3) var(--m3e-space-4)}
-.taxonomy span{font:var(--m3e-type-label-medium);color:var(--on-surface-variant)}
-.taxonomy a:hover,.taxonomy a:focus-visible{color:var(--primary);text-decoration:underline}
-
+.filter-status:not([hidden]){display:flex;align-items:center;gap:var(--m3e-space-4);margin:var(--m3e-space-3)}.filter-status a{color:var(--primary);text-decoration:underline}
 h1{font:var(--m3e-type-headline-medium);margin-bottom:var(--m3e-space-4)}.game-review h1{display:flex;align-items:center;gap:var(--m3e-space-3);font:var(--m3e-type-headline-large);overflow-wrap:anywhere}
 .list{display:grid;gap:var(--m3e-space-4)}.game-info{display:flex;gap:var(--m3e-space-4);align-items:start;margin-block:var(--m3e-space-6);padding-bottom:var(--m3e-space-6);border-bottom:1px dashed var(--outline-variant)}.game-info .cover{width:clamp(84px,22%,160px);height:auto;aspect-ratio:8/5;object-fit:cover;border-radius:var(--shape-corner-m)}.game-info>div{min-width:0;flex:1}.game-info p{margin-bottom:var(--m3e-space-2);overflow-wrap:anywhere}.game-links{display:flex;flex-wrap:wrap;gap:var(--m3e-space-3);margin-top:var(--m3e-space-3)}.game-links a,footer a{color:var(--primary);text-decoration:underline}.review-toc{margin-bottom:var(--m3e-space-6)}footer{border-top:1px solid var(--outline-variant);padding-top:var(--m3e-space-4)}[data-game-entry][hidden]{display:none}
 </style>

@@ -1,0 +1,10 @@
+---
+import Icon from "@components/atoms/display/Icon.svelte";
+interface Props { href: string; label: string }
+const {href, label} = Astro.props;
+---
+<a class="source-link" href={href} target="_blank" rel="noopener noreferrer"><span>{label}</span><Icon icon="material-symbols:open-in-new-rounded" /></a>
+<style>
+.source-link{display:inline-flex;align-items:center;gap:var(--m3e-space-2);color:var(--primary);text-decoration:underline;text-underline-offset:0.2em;overflow-wrap:anywhere}
+.source-link :global(svg){flex-shrink:0;width:1em;height:1em}
+</style>

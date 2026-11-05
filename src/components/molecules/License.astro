@@ -1,4 +1,5 @@
 ---
+import SourceLink from "@components/molecules/SourceLink.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
@@ -58,7 +59,7 @@ const postUrl = decodeURIComponent(
 		{licenseConf.source && (
 			<div class="m3-license-card__meta-item">
 				<div class="m3-license-card__meta-label">{i18n(I18nKey.reprintSource)}</div>
-				<a href={licenseConf.source} target="_blank" rel="noopener noreferrer" class="m3-license-card__meta-link m3-license-card__source">{licenseConf.source}</a>
+				<SourceLink href={licenseConf.source} label={licenseConf.source} />
 			</div>
 		)}
 	</div>

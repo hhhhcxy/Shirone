@@ -6,8 +6,8 @@ import { gamesConfig } from "@/config/gamesConfig";
 import { url } from "@utils/url-utils";
 const groups = gameTaxonomy(await getGames());
 ---
-{gamesConfig.enable && <>
+{gamesConfig.enable && <div class="flex flex-col gap-4">
   <Categories items={groups.categories} id="game-categories" indexHref={url("/games/categories/")} />
   <Tags items={groups.tags} id="game-tags" indexHref={url("/games/tags/")} />
-</>}
+</div>}
 <script>import "@utils/game-filter";</script>

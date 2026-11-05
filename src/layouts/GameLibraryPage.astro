@@ -1,4 +1,10 @@
 ---
+import SourceLink from "@components/molecules/SourceLink.astro";
+import PostMeta from "@components/atoms/blog/PostMeta.astro";
+import ArticleDiscoveryItem from "@components/molecules/ArticleDiscoveryItem.astro";
+import LastUpdatedNotice from "@components/molecules/LastUpdatedNotice.astro";
+import { articleConfig, resolveLastUpdatedNoticeOptions } from "@/config/articleConfig";
+import { getGames } from "@utils/game-library";
 import CategoryIndex from "@components/molecules/CategoryIndex.astro";
 import TagIndex from "@components/molecules/TagIndex.astro";
 import {gameTaxonomy} from "@utils/game-library";
@@ -22,25 +28,47 @@ const title = game?.data.title ?? i18n(labels[kind as keyof typeof labels]);
 const taxonomy = (kind==="categories" || kind==="tags") ? gameTaxonomy(games) : undefined;
 const summary = taxonomy ? (kind==="categories" ? taxonomy.categories.length+" "+i18n(K.categoriesCount) : taxonomy.tags.length+" "+i18n(K.tagsCount))+" · "+i18n(K.games)+" "+games.length : "";
 const rendered=game?await render(game):undefined;const Content=rendered?.Content;
+const reviewed = Boolean(game?.body?.trim());
+const words = reviewed ? rendered?.remarkPluginFrontmatter.words : undefined;
+const lastUpdated = resolveLastUpdatedNoticeOptions(articleConfig);
+// Preserve the library's date ordering when tag relevance is equal.
+const related = game && reviewed && articleConfig.discovery.enable ? (await getGames())
+  .filter(entry => entry.id !== game.id && entry.body?.trim())
+  .map(entry => ({ entry, score: entry.data.tags.filter(tag => game.data.tags.includes(tag)).length }))
+  .sort((a,b) => b.score-a.score).slice(0,3).map(({entry}) => entry) : [];
+const platformLinks = game ? game.data.platforms.map(label => {
+  const match = game.data.links.find(link => link.label.trim().toLowerCase() === label.trim().toLowerCase());
+  return {label, url:match?.url};
+}) : [];
+const otherLinks = game?.data.links.filter(link => !platformLinks.some(platform => platform.url === link.url)) ?? [];
 const assets=rendered?await getMarkdownStylesheetAssets(rendered.remarkPluginFrontmatter.markdownSyntaxes):[];
 ---
 <MainGridLayout title={title} page="games" gameDetail={Boolean(game)} bannerDate={game?.body?.trim()?game.data.reviewUpdated?.toISOString().slice(0,10):undefined} headings={rendered?.headings}>
 {assets.map(({pack,css})=><style is:inline slot="head" data-swup-optional={pack} set:html={css}/>)}
 <GamesNav kind={game?"all":kind}/>
-{game?<Card color="var(--card-bg)" radius="l" class="px-6 md:px-9 pt-6 pb-6">
+{game?<><Card color="var(--card-bg)" radius="l" class="px-6 md:px-9 pt-6 pb-6">
 <article class="game-review" data-game-kind={kind} data-pagefind-body><header>
 <h1 data-pagefind-meta="title" data-pagefind-weight="10"><AccentBar size="large"/>{title}</h1>
+<PostMeta
+  published={reviewed ? game.data.reviewUpdated?.toISOString().slice(0,10) : undefined}
+  category={{name:i18n(kind==="service"?K.gamesService:K.gamesProduct),href:url('/games/'+kind+'/')}}
+  tags={game.data.tags.map(name=>({name,href:url('/games/all/')+'?gameTag='+encodeURIComponent(name)}))}
+  wordCount={words === undefined ? undefined : words+' '+i18n(words===1?K.wordCount:K.wordsCount)} />
 <div class="game-info"><span class="cover"><GameCover src={game.coverUrl}/></span>
 <div><p><GameGrade grade={game.data.grade}/> {game.data.status} {game.data.hours!==undefined&&<span> · {game.data.hours} {i18n(K.gamesHours)}</span>}</p>
-<p>{game.data.platforms.join(" · ")}</p><p>{game.data.summary}</p>
-<div class="game-links">{game.data.tags.map(tag=><a href={url('/games/'+kind+'/')+'?gameTag='+encodeURIComponent(tag)}>{tag}</a>)}</div>
-<div class="game-links">{game.data.links.map(link=><a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</div></div></div>
+<p>{game.data.summary}</p>
+<div class="game-links" data-game-platforms>{platformLinks.map(link => link.url ? <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a> : <span>{link.label}</span>)}{otherLinks.map(link=><a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}</div></div></div>
 </header>
 {rendered&&rendered.headings.length>0&&<details class="review-toc"><summary>{i18n(K.tableOfContents)}</summary><TocList headings={rendered.headings}/></details>}
 {game.body?.trim() && Content ? <Markdown class="mb-6"><Content/></Markdown> : <p class="mb-6" data-game-no-review>{i18n(K.gamesNoReview)}</p>}
-{game.data.steamReviewUrl&&<p class="mb-6"><a href={game.data.steamReviewUrl} target="_blank" rel="noopener noreferrer">{i18n(K.gamesReviewSource)}</a></p>}
-<footer><a href={url('/games/'+kind+'/')}>{i18n(kind==="service"?K.gamesService:K.gamesProduct)}</a></footer>
-</article></Card>:
+{game.data.steamReviewUrl&&<p class="review-source"><SourceLink href={game.data.steamReviewUrl} label={i18n(K.gamesReviewSource)}/></p>}
+{related.length>0 && <section class="review-discovery" aria-labelledby="game-discovery-title">
+<h2 id="game-discovery-title">{i18n(K.continueReading)}</h2>
+<ul>{related.map(entry=><ArticleDiscoveryItem href={url('/games/'+entry.id+'/')} title={entry.data.title} published={entry.data.reviewUpdated?.toISOString().slice(0,10) ?? ''} category={i18n(entry.data.kind==='service'?K.gamesService:K.gamesProduct)} lane="related"/>)}</ul>
+</section>}
+</article></Card>
+{reviewed && game.data.reviewUpdated && lastUpdated && <LastUpdatedNotice date={game.data.reviewUpdated} minimumAgeDays={lastUpdated.minimumAgeDays} class="mt-6"/>}
+</>:
 taxonomy ? (kind==="categories" ? <CategoryIndex categories={taxonomy.categories} {summary}/> : <TagIndex tags={taxonomy.tags} {summary}/>) :
 <section><h1 class="px-4">{title}</h1>
     <div data-game-filter-summary hidden class="filter-status"><span data-game-filter-text></span> <a href={url("/games/"+kind+"/")}>{i18n(K.clear)}</a></div>
@@ -55,6 +83,8 @@ taxonomy ? (kind==="categories" ? <CategoryIndex categories={taxonomy.categories
 <style>
 .filter-status:not([hidden]){display:flex;align-items:center;gap:var(--m3e-space-4);margin:var(--m3e-space-3)}.filter-status a{color:var(--primary);text-decoration:underline}
 h1{font:var(--m3e-type-headline-medium);margin-bottom:var(--m3e-space-4)}.game-review h1{display:flex;align-items:center;gap:var(--m3e-space-3);font:var(--m3e-type-headline-large);overflow-wrap:anywhere}
-.list{display:grid;gap:var(--m3e-space-4)}.game-info{display:flex;gap:var(--m3e-space-4);align-items:start;margin-block:var(--m3e-space-6);padding-bottom:var(--m3e-space-6);border-bottom:1px dashed var(--outline-variant)}.game-info .cover{width:clamp(84px,22%,160px);height:auto;aspect-ratio:8/5;object-fit:cover;border-radius:var(--shape-corner-m)}.game-info>div{min-width:0;flex:1}.game-info p{margin-bottom:var(--m3e-space-2);overflow-wrap:anywhere}.game-links{display:flex;flex-wrap:wrap;gap:var(--m3e-space-3);margin-top:var(--m3e-space-3)}.game-links a,footer a{color:var(--primary);text-decoration:underline}.review-toc{margin-bottom:var(--m3e-space-6)}footer{border-top:1px solid var(--outline-variant);padding-top:var(--m3e-space-4)}[data-game-entry][hidden]{display:none}
+.list{display:grid;gap:var(--m3e-space-4)}.game-info{display:flex;gap:var(--m3e-space-4);align-items:start;margin-block:var(--m3e-space-6);padding-bottom:var(--m3e-space-6);border-bottom:1px dashed var(--outline-variant)}.game-info .cover{width:clamp(84px,22%,160px);height:auto;aspect-ratio:8/5;object-fit:cover;border-radius:var(--shape-corner-m)}.game-info>div{min-width:0;flex:1}.game-info p{margin-bottom:var(--m3e-space-2);overflow-wrap:anywhere}.game-links{display:flex;flex-wrap:wrap;gap:var(--m3e-space-3);margin-top:var(--m3e-space-3)}.game-links a{color:var(--primary);text-decoration:underline}.review-toc{margin-bottom:var(--m3e-space-6)}[data-game-entry][hidden]{display:none}
+.review-source{margin-block:var(--m3e-space-6);padding:var(--m3e-space-4);background:var(--surface-container-low);border-radius:var(--shape-corner-m)}
+.review-discovery{margin-top:var(--m3e-space-6)}.review-discovery h2{display:flex;align-items:center;gap:var(--m3e-space-4);font:var(--m3e-type-headline-medium);font-weight:700}.review-discovery h2::after{content:"";flex:1;height:1px;background:var(--outline-variant)}.review-discovery ul{margin-top:var(--m3e-space-4);padding:var(--m3e-space-2);border-radius:var(--shape-corner-m);background:var(--surface-container-low)}
 </style>
 <script>import "@utils/game-filter";</script>

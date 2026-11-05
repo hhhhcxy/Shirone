@@ -20,7 +20,7 @@ const accent = lane === "related" ? "var(--primary)" : "var(--tertiary)";
 		<span class="article-discovery-item__content">
 			<span class="article-discovery-item__title">{title}</span>
 			<span class="article-discovery-item__meta">
-				<time datetime={published}>{published}</time>
+				{published && <time datetime={published}>{published}</time>}
 				{category && <span>{category}</span>}
 			</span>
 		</span>

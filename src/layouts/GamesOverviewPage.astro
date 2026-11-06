@@ -5,7 +5,7 @@ import GamesNav from "@components/molecules/GamesNav.astro";
 import GameTile from "@components/molecules/GameTile.astro";
 import GameGrade from "@components/molecules/GameGrade.astro";
 import {getGames,recentGames,recommendedGames} from "@utils/game-library";
-import {selectGames} from "@utils/game-order";
+import {recommendedGrades, selectGames} from "@utils/game-order";
 import {gamesConfig} from "@/config/gamesConfig";
 import K from "@i18n/i18nKey";import {i18n} from "@i18n/translation";
 import {resolveI18nText} from "@utils/i18n-utils";
@@ -15,11 +15,23 @@ const recommended=selectGames(games,gamesConfig.recommendationIds,recommendedGam
 ---
 <MainGridLayout title={i18n(K.games)} page="games">
 <GamesNav/>
-<div class="overview"><Card color="var(--card-bg)" radius="l" class="p-6"><h1>{i18n(K.games)}</h1><p>{resolveI18nText(gamesConfig.description,K.gamesBanner)}</p></Card>
+<div class="overview"><Card color="var(--card-bg)" radius="l" class="p-6"><h1>{i18n(K.games)}</h1><div class="intro">
+  {resolveI18nText(gamesConfig.description,K.gamesBanner).split(/\n\s*\n/).map(paragraph => <p>{paragraph}</p>)}
+  {gamesConfig.ratingGuide && <details>
+    <summary>{gamesConfig.ratingGuide.title}</summary>
+    <p>{gamesConfig.ratingGuide.note}</p>
+    <dl>{gamesConfig.ratingGuide.entries.map(({grade, text}) => <div><dt>{grade}</dt><dd>{text}</dd></div>)}</dl>
+  </details>}
+</div></Card>
 <Card color="var(--card-bg)" radius="l" class="p-6"><section><h2>{i18n(K.gamesRecent)}</h2><div class="tiles">{recent.map(game=><GameTile game={game}/>)}</div></section></Card>
-<Card color="var(--card-bg)" radius="l" class="p-6"><section><h2>{i18n(K.gamesRecommended)}</h2>{(["S+","S"] as const).map(grade=>{const entries=recommended.filter(g=>g.data.grade===grade);return entries.length>0&&<div class="tier"><h3><GameGrade grade={grade}/></h3><div class="tiles">{entries.map(game=><GameTile game={game}/>)}</div></div>})}</section></Card>
+<Card color="var(--card-bg)" radius="l" class="p-6"><section><h2>{i18n(K.gamesRecommended)}</h2>{recommendedGrades.map(grade=>{const entries=recommended.filter(g=>g.data.grade===grade);return entries.length>0&&<div class="tier"><h3><GameGrade grade={grade}/></h3><div class="tiles">{entries.map(game=><GameTile game={game}/>)}</div></div>})}</section></Card>
 </div></MainGridLayout>
 <style>
+.intro {display:grid;gap:var(--m3e-space-3);margin-top:var(--m3e-space-3)}
+.intro p {white-space:pre-line}
+summary {cursor:pointer}
+details > p, dl {margin-top:var(--m3e-space-3)}
+dl > div {display:grid;grid-template-columns:2.5rem 1fr;padding-block:var(--m3e-space-1)}
 .overview{display:grid;gap:var(--m3e-space-4);min-width:0}h1{font:var(--m3e-type-headline-medium)}h2{font:var(--m3e-type-title-large);margin-bottom:var(--m3e-space-4)}section{min-width:0}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:var(--m3e-space-4);align-items:start}.tiles>a{max-width:160px}.tier{display:grid;grid-template-columns:3rem minmax(0,1fr);gap:var(--m3e-space-4);padding-block:var(--m3e-space-4);border-top:1px solid var(--outline-variant)}
 @media(max-width:480px){.tier{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--m3e-space-3)}}

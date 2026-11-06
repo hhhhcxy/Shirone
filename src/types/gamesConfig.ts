@@ -62,6 +62,7 @@ export interface GameItem {
 
 /** 游戏页全局配置（行为层） */
 export interface GamesConfig extends PageMeta {
+	ratingGuide?: { title: string; note: string; entries: { grade: string; text: string }[] };
 	/** Omitted = automatic; empty array = intentionally empty. Array order is editorial order. */
 	recentIds?: string[];
 	recommendationIds?: string[];

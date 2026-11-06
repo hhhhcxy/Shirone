@@ -28,14 +28,15 @@ test("recent excludes missing dates and sorts stably", () => {
 test("recommendations use grade then author order then slug", () => {
 	assert.deepEqual(
 		recommendedGames([
-			game("a", "A"),
+			game("good", "A"),
+			game("average", "B"),
 			game("b", undefined),
 			game("z", "S", undefined, -1),
 			game("c", "S+"),
 			game("b", "S"),
 			game("a", "S"),
 		]).map((g) => g.id),
-		["c", "z", "a", "b"],
+		["c", "z", "a", "b", "good"],
 	);
 	assert.deepEqual(recommendedGames([]), []);
 	assert.equal(

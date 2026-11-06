@@ -9,10 +9,12 @@ export function recentGames(games: LibraryGame[]): LibraryGame[] {
 		)
 		.slice(0, 10);
 }
+export const recommendedGrades = ["S+", "S", "A"] as const;
+
 export function recommendedGames(games: LibraryGame[]): LibraryGame[] {
-	const grades = ["S+", "S", "A", "B", "C"];
+	const grades: readonly string[] = recommendedGrades;
 	return games
-		.filter((g) => g.data.grade && grades.indexOf(g.data.grade) <= 1)
+		.filter((g) => g.data.grade && grades.includes(g.data.grade))
 		.sort(
 			(a, b) =>
 				grades.indexOf(a.data.grade!) - grades.indexOf(b.data.grade!) ||

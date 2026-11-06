@@ -70,3 +70,9 @@ export function gameTaxonomy(games: LibraryGame[]) {
    })),
  };
 }
+
+export const gradeFilters = [
+  {slug: "s-plus", value: "S+"}, {slug: "s", value: "S"},
+  {slug: "a", value: "A"}, {slug: "b", value: "B"},
+  {slug: "c", value: "C"}, {slug: "unrated", value: undefined},
+] as const;

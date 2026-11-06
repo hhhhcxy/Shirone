@@ -10,6 +10,7 @@ import {
 
 interface Props {
 	date: Date;
+	displayDate?: string;
 	minimumAgeDays: number;
 	class?: string;
 }
@@ -17,7 +18,7 @@ interface Props {
 const { date, minimumAgeDays, class: className = "" } = Astro.props;
 const normalizedMinimumAgeDays = normalizeMinimumAgeDays(minimumAgeDays);
 const state = resolveLastUpdatedNoticeState(date, normalizedMinimumAgeDays);
-const formattedDate = formatDateToYYYYMMDD(date);
+const formattedDate = Astro.props.displayDate ?? formatDateToYYYYMMDD(date);
 const messageParts = i18n(I18nKey.lastUpdatedNotice).split(
 	/(\{date\}|\{days\})/g,
 );

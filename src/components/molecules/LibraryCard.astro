@@ -1,4 +1,5 @@
 ---
+import {formatInstantDateInSiteTimeZone} from "@utils/content-date";
 import PostCard from "@components/atoms/blog/PostCard.astro";
 import GameCover from "@components/molecules/GameCover.astro";
 import GameGrade from "@components/molecules/GameGrade.astro";
@@ -13,7 +14,7 @@ const d = game.data;
 const href = url("/games/"+game.id+"/");
 const reviewed = Boolean(game.body?.trim());
 const words = reviewed ? (await render(game)).remarkPluginFrontmatter.words : undefined;
-const date = reviewed ? d.reviewUpdated?.toISOString().slice(0,10) : undefined;
+const date = reviewed && d.reviewUpdated ? formatInstantDateInSiteTimeZone(d.reviewUpdated) : undefined;
 ---
 <PostCard class="library-card" {href} title={d.title}
   published={date}

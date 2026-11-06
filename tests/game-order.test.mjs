@@ -22,7 +22,7 @@ test("recent excludes missing dates and sorts stably", () => {
 		recentGames(
 			Array.from({ length: 12 }, (_, i) => game("g" + i, "S", "2026-01-01")),
 		).length,
-		10,
+		8,
 	);
 });
 test("recommendations use grade then author order then slug", () => {
@@ -42,12 +42,12 @@ test("recommendations use grade then author order then slug", () => {
 	assert.equal(
 		recommendedGames(Array.from({ length: 12 }, (_, i) => game("g" + i, "S")))
 			.length,
-		10,
+		12,
 	);
 });
 import { validateGameSlug } from "../src/utils/game-order.ts";
 test("reject reserved and malformed slugs", () => {
-	for (const id of ["all", "service", "product", "a/b", "A"])
+	for (const id of ["all", "service", "product", "grades", "a/b", "A"])
 		assert.throws(() => validateGameSlug(id));
 	validateGameSlug("minecraft");
 });

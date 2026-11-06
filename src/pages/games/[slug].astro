@@ -7,7 +7,7 @@ interface Props { games: LibraryGame[]; kind: string; game?: LibraryGame; redire
 export async function getStaticPaths() {
   if (!gamesConfig.enable) return [];
   const games = await getGames();
-  const collections = ["all", "service", "product", "categories", "tags", "reviews"].map(kind => {
+  const collections = ["all", "service", "product", "categories", "tags", "reviews", "grades"].map(kind => {
     let entries = games;
     if (kind === "service" || kind === "product") entries = games.filter(game => game.data.kind === kind);
     if (kind === "reviews") entries = games.filter(game => game.body?.trim());

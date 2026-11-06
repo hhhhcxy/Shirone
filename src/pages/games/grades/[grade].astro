@@ -1,0 +1,15 @@
+---
+import GameLibraryPage from "@layouts/GameLibraryPage.astro";
+import { gamesConfig } from "@/config/gamesConfig";
+import { getGames, gradeFilters } from "@utils/game-library";
+
+export async function getStaticPaths() {
+  if (!gamesConfig.enable) return [];
+  const games = await getGames();
+  return gradeFilters.map(({slug}) => ({
+    params: {grade: slug},
+    props: {games, kind: "grades", grade: slug},
+  }));
+}
+---
+<GameLibraryPage {...Astro.props} />

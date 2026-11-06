@@ -25,7 +25,7 @@ function normalizeCount(value: number): number {
 	return Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 }
 
-function uniqueArticles<T extends DiscoverableArticle>(articles: T[]): T[] {
+function uniqueArticles<T extends {slug: string}>(articles: T[]): T[] {
 	const seen = new Set<string>();
 	return articles.filter((article) => {
 		if (seen.has(article.slug)) return false;
@@ -102,7 +102,7 @@ export function selectRelatedArticles<T extends DiscoverableArticle>(
 		.map(({ article }) => article);
 }
 
-export function selectRandomArticles<T extends DiscoverableArticle>(
+export function selectRandomArticles<T extends {slug: string}>(
 	current: T,
 	articles: T[],
 	count: number,

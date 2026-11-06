@@ -108,7 +108,7 @@ export const zh_CN: Translation = {
 	[Key.gamesViewDetails]: "商店页面",
 	[Key.gamesFeatured]: "特别推荐",
 	[Key.gamesHours]: "小时",
-	[Key.gamesRating]: "评分",
+	[Key.gamesRating]: "评级",
 
 	[Key.timeline]: "时间线",
 	[Key.timelineBanner]: "成长轨迹、重要经历与里程碑记录。",

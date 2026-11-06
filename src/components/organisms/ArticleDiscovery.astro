@@ -7,13 +7,20 @@ import type { PostForList } from "@utils/content-utils";
 import { formatDateToYYYYMMDD } from "@utils/date-utils";
 import { getPostUrlBySlug } from "@utils/url-utils";
 
+interface DiscoveryLink {href: string; title: string; published: string; category?: string | null}
+function asLink(item: PostForList | DiscoveryLink): DiscoveryLink {
+  if ("href" in item) return item;
+  return {href: item.url ?? getPostUrlBySlug(item.slug), title: item.data.title,
+    published: formatDateToYYYYMMDD(item.data.published), category: item.data.category};
+}
 interface Props {
-	related: PostForList[];
-	random: PostForList[];
+  showSubtitles?: boolean;
+	related: (PostForList | DiscoveryLink)[];
+	random: (PostForList | DiscoveryLink)[];
 	class?: string;
 }
 
-const { related, random, class: className } = Astro.props;
+const { related, random, showSubtitles = true, class: className } = Astro.props;
 const hasRelated = related.length > 0;
 const hasRandom = random.length > 0;
 ---
@@ -36,15 +43,12 @@ const hasRandom = random.length > 0;
 							<Icon icon="material-symbols:hub-outline-rounded" />
 							<h3>{i18n(I18nKey.relatedReading)}</h3>
 						</div>
-						<p>{i18n(I18nKey.relatedReadingSubtitle)}</p>
+						{showSubtitles && <p>{i18n(I18nKey.relatedReadingSubtitle)}</p>}
 					</div>
 					<ul class="article-discovery__list">
 						{related.map((article) => (
 							<ArticleDiscoveryItem
-								href={article.url ?? getPostUrlBySlug(article.slug)}
-								title={article.data.title}
-								published={formatDateToYYYYMMDD(article.data.published)}
-								category={article.data.category}
+								{...asLink(article)}
 								lane="related"
 							/>
 						))}
@@ -59,15 +63,12 @@ const hasRandom = random.length > 0;
 							<Icon icon="material-symbols:explore-outline-rounded" />
 							<h3>{i18n(I18nKey.randomReading)}</h3>
 						</div>
-						<p>{i18n(I18nKey.randomReadingSubtitle)}</p>
+						{showSubtitles && <p>{i18n(I18nKey.randomReadingSubtitle)}</p>}
 					</div>
 					<ul class="article-discovery__list">
 						{random.map((article) => (
 							<ArticleDiscoveryItem
-								href={article.url ?? getPostUrlBySlug(article.slug)}
-								title={article.data.title}
-								published={formatDateToYYYYMMDD(article.data.published)}
-								category={article.data.category}
+								{...asLink(article)}
 								lane="random"
 							/>
 						))}

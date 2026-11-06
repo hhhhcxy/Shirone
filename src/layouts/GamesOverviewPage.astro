@@ -10,7 +10,7 @@ import {gamesConfig} from "@/config/gamesConfig";
 import K from "@i18n/i18nKey";import {i18n} from "@i18n/translation";
 import {resolveI18nText} from "@utils/i18n-utils";
 const games=await getGames();
-const recent=selectGames(games,gamesConfig.recentIds,recentGames);
+const recent=selectGames(games,gamesConfig.recentIds,recentGames).slice(0,8);
 const recommended=selectGames(games,gamesConfig.recommendationIds,recommendedGames);
 ---
 <MainGridLayout title={i18n(K.games)} page="games">

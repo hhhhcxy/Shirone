@@ -7,7 +7,7 @@ export function recentGames(games: LibraryGame[]): LibraryGame[] {
 				b.data.lastPlayed!.getTime() - a.data.lastPlayed!.getTime() ||
 				a.id.localeCompare(b.id, "en"),
 		)
-		.slice(0, 10);
+		.slice(0, 8);
 }
 export const recommendedGrades = ["S+", "S", "A"] as const;
 
@@ -20,14 +20,13 @@ export function recommendedGames(games: LibraryGame[]): LibraryGame[] {
 				grades.indexOf(a.data.grade!) - grades.indexOf(b.data.grade!) ||
 				a.data.recommendationOrder - b.data.recommendationOrder ||
 				a.id.localeCompare(b.id, "en"),
-		)
-		.slice(0, 10);
+		);
 }
 
 export function validateGameSlug(id: string): void {
 	if (
 		!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id) ||
-		["all", "service", "product", "reviews", "categories", "tags"].includes(id)
+		["grades", "all", "service", "product", "reviews", "categories", "tags"].includes(id)
 	)
 		throw new Error("Invalid or reserved game slug: " + id);
 }
@@ -51,8 +50,7 @@ export function selectGames(
 			seen.add(id);
 			const game = games.find((g) => g.id === id);
 			return game ? [game] : [];
-		})
-		.slice(0, 10);
+		});
 }
 
 /** Review activity, independent from playtime and filesystem timestamps. */

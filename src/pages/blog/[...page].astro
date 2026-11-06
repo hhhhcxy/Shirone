@@ -1,4 +1,6 @@
 ---
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
 import { siteConfig } from "@/config/siteConfig";
 import Pagination from "@components/molecules/Pagination.astro";
 import PostPage from "@components/organisms/PostPage.astro";
@@ -19,7 +21,7 @@ const { page } = Astro.props;
 const len = page.data.length;
 ---
 
-<MainGridLayout page="blog">
+<MainGridLayout title={i18n(I18nKey.allPosts)} page="blog">
     <PostPage page={page}></PostPage>
     <Pagination class="mx-auto onload-animation" page={page} style={`animation-delay: calc(var(--content-delay) + ${(len)*50}ms)`}></Pagination>
 </MainGridLayout>

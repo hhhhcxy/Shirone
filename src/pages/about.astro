@@ -3,6 +3,6 @@ import AboutPage from "@layouts/AboutPage.astro";
 import { siteConfig, aboutConfig } from "@/config";
 import { url as siteUrl } from "@utils/url-utils";
 if (siteConfig.homePage === "about") return Astro.redirect(siteUrl("/"), 301);
-if (!aboutConfig.enable) return Astro.redirect(siteUrl("/404/"));
+if (!aboutConfig.enable) return Astro.redirect(siteUrl("/404.html"));
 ---
 <AboutPage />

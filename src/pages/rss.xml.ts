@@ -1,10 +1,11 @@
 import rss from "@astrojs/rss";
 import { getFeedPosts } from "@utils/feed";
+import { url } from "@utils/url-utils";
 import type { APIContext } from "astro";
 import { siteConfig } from "@/config";
 
 export async function GET(context: APIContext): Promise<Response> {
-	const site = context.site ?? new URL(siteConfig.site);
+	const site = new URL(url("/"), context.site ?? siteConfig.site);
 	const posts = await getFeedPosts(site);
 
 	return rss({

@@ -99,7 +99,7 @@ let pageTitle: string;
 if (title) {
 	pageTitle = `${title} - ${siteConfig.title}`;
 } else {
-	pageTitle = `${siteConfig.title} - ${siteConfig.subtitle}`;
+	pageTitle = [siteConfig.title, siteConfig.subtitle].filter(Boolean).join(" - ");
 }
 
 const favicons: Favicon[] =
@@ -220,8 +220,8 @@ const defaultSchemeStyle = createDefaultSchemeStyle();
 		}}></style>
 
 		<slot name="head"></slot>
-		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
-		<link rel="alternate" type="application/atom+xml" title={profileConfig.name} href={`${Astro.site}atom.xml`}/>
+		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={toAbsoluteUrl("/rss.xml", canonicalUrl)}/>
+		<link rel="alternate" type="application/atom+xml" title={profileConfig.name} href={toAbsoluteUrl("/atom.xml", canonicalUrl)}/>
 	</head>
 	<body
 		class="min-h-screen transition"

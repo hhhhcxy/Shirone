@@ -13,14 +13,14 @@ import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { seriesConfig } from "@/config";
 
 if (!seriesConfig.enable) {
-	return Astro.redirect("/404/");
+	return Astro.redirect(url("/404.html"));
 }
 
 import { getSeriesCatalog, getSortedPostsList } from "@utils/content-utils";
 import { formatDateToYYYYMMDD } from "@utils/date-utils";
 import { resolveI18nText } from "@utils/i18n-utils";
 import { excerptFromMarkdown, normaliseSeriesSlug } from "@utils/series-utils";
-import { getSeriesUrl } from "@utils/url-utils";
+import { getSeriesUrl, url } from "@utils/url-utils";
 
 interface SeriesIndexItem {
 	slug: string;

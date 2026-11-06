@@ -36,7 +36,7 @@ const { slug } = Astro.params;
 const catalog = await getSeriesCatalog();
 const series = slug ? catalog.get(slug) : undefined;
 if (!series) {
-	return Astro.redirect("/404/");
+	return Astro.redirect(url("/404.html"));
 }
 
 const { Content, remarkPluginFrontmatter } = await render(series);
